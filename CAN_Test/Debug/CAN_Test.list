@@ -1,0 +1,2326 @@
+
+CAN_Test.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .isr_vector   00000130  08000000  08000000  00010000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         00000cdc  08000130  08000130  00010130  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .rodata       00000000  08000e0c  08000e14  00010e14  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .ARM.extab    00000000  08000e0c  08000e0c  00010e14  2**0
+                  CONTENTS
+  4 .ARM          00000000  08000e0c  08000e0c  00010e14  2**0
+                  CONTENTS
+  5 .preinit_array 00000000  08000e0c  08000e14  00010e14  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  6 .init_array   00000004  08000e0c  08000e0c  00010e0c  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  7 .fini_array   00000004  08000e10  08000e10  00010e10  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  8 .data         00000000  20000000  20000000  00010e14  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .bss          00000020  20000000  08000e14  00020000  2**2
+                  ALLOC
+ 10 ._user_heap_stack 00000600  20000020  08000e14  00020020  2**0
+                  ALLOC
+ 11 .ARM.attributes 00000029  00000000  00000000  00010e14  2**0
+                  CONTENTS, READONLY
+ 12 .debug_info   0000120c  00000000  00000000  00010e3d  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 13 .debug_abbrev 000007c1  00000000  00000000  00012049  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 14 .debug_aranges 00000200  00000000  00000000  00012810  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 15 .debug_ranges 000001a8  00000000  00000000  00012a10  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 16 .debug_macro  00001862  00000000  00000000  00012bb8  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 17 .debug_line   00001146  00000000  00000000  0001441a  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 18 .debug_str    00005acb  00000000  00000000  00015560  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 19 .comment      00000050  00000000  00000000  0001b02b  2**0
+                  CONTENTS, READONLY
+ 20 .debug_frame  000006d8  00000000  00000000  0001b07c  2**2
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+
+Disassembly of section .text:
+
+08000130 <__do_global_dtors_aux>:
+ 8000130:	b510      	push	{r4, lr}
+ 8000132:	4c05      	ldr	r4, [pc, #20]	; (8000148 <__do_global_dtors_aux+0x18>)
+ 8000134:	7823      	ldrb	r3, [r4, #0]
+ 8000136:	b933      	cbnz	r3, 8000146 <__do_global_dtors_aux+0x16>
+ 8000138:	4b04      	ldr	r3, [pc, #16]	; (800014c <__do_global_dtors_aux+0x1c>)
+ 800013a:	b113      	cbz	r3, 8000142 <__do_global_dtors_aux+0x12>
+ 800013c:	4804      	ldr	r0, [pc, #16]	; (8000150 <__do_global_dtors_aux+0x20>)
+ 800013e:	f3af 8000 	nop.w
+ 8000142:	2301      	movs	r3, #1
+ 8000144:	7023      	strb	r3, [r4, #0]
+ 8000146:	bd10      	pop	{r4, pc}
+ 8000148:	20000000 	.word	0x20000000
+ 800014c:	00000000 	.word	0x00000000
+ 8000150:	08000df4 	.word	0x08000df4
+
+08000154 <frame_dummy>:
+ 8000154:	b508      	push	{r3, lr}
+ 8000156:	4b03      	ldr	r3, [pc, #12]	; (8000164 <frame_dummy+0x10>)
+ 8000158:	b11b      	cbz	r3, 8000162 <frame_dummy+0xe>
+ 800015a:	4903      	ldr	r1, [pc, #12]	; (8000168 <frame_dummy+0x14>)
+ 800015c:	4803      	ldr	r0, [pc, #12]	; (800016c <frame_dummy+0x18>)
+ 800015e:	f3af 8000 	nop.w
+ 8000162:	bd08      	pop	{r3, pc}
+ 8000164:	00000000 	.word	0x00000000
+ 8000168:	20000004 	.word	0x20000004
+ 800016c:	08000df4 	.word	0x08000df4
+
+08000170 <MCAN_voidInit>:
+/*I/P Parameters: void																		 */
+/*Returns:it returns nothing	                            							     */
+/*Desc:This Function allows CAN to work with all the needed setups		                     */
+/*********************************************************************************************/
+void MCAN_voidInit()
+{
+ 8000170:	b580      	push	{r7, lr}
+ 8000172:	af00      	add	r7, sp, #0
+	MCAN_voidSetup();               // Setup the CAN Registers with Configurations
+ 8000174:	f000 f9ec 	bl	8000550 <MCAN_voidSetup>
+	MCAN_voidInitializationMode();  // Leave the Sleep mode and Enter The Initialization Mode
+ 8000178:	f000 fa1c 	bl	80005b4 <MCAN_voidInitializationMode>
+	MCAN_voidMode();			       // Initialize the Mode to enter Test-Mode or not
+ 800017c:	f000 fa02 	bl	8000584 <MCAN_voidMode>
+	MCAN_voidFiltersInit();         // Initialize The Filters
+ 8000180:	f000 fa56 	bl	8000630 <MCAN_voidFiltersInit>
+	MCAN_voidStart();		       // Leave the Initialization Mode and Enter The Normal Mode
+ 8000184:	f000 fa38 	bl	80005f8 <MCAN_voidStart>
+}
+ 8000188:	bf00      	nop
+ 800018a:	bd80      	pop	{r7, pc}
+
+0800018c <MCAN_voidSendMessage>:
+/*I/P Parameters: CAN_Msg *msg																*/
+/*Returns:it returns nothing	                            							    */
+/*Desc:This Function Sends a message over the CAN Network			                        */
+/********************************************************************************************/
+void MCAN_voidSendMessage (CAN_Msg *msg)
+{
+ 800018c:	b580      	push	{r7, lr}
+ 800018e:	b082      	sub	sp, #8
+ 8000190:	af00      	add	r7, sp, #0
+ 8000192:	6078      	str	r0, [r7, #4]
+	if ( MCAN_u8CheckReady(msg->MailBoxNum) )
+ 8000194:	687b      	ldr	r3, [r7, #4]
+ 8000196:	7bdb      	ldrb	r3, [r3, #15]
+ 8000198:	4618      	mov	r0, r3
+ 800019a:	f000 f965 	bl	8000468 <MCAN_u8CheckReady>
+ 800019e:	4603      	mov	r3, r0
+ 80001a0:	2b00      	cmp	r3, #0
+ 80001a2:	f000 809d 	beq.w	80002e0 <MCAN_voidSendMessage+0x154>
+	{
+		/*Reset the value of TIR Register*/
+		CAN->TxMailBox[((msg->MailBoxNum)-MailBox_Shift)].TIR = 0;
+ 80001a6:	4a50      	ldr	r2, [pc, #320]	; (80002e8 <MCAN_voidSendMessage+0x15c>)
+ 80001a8:	687b      	ldr	r3, [r7, #4]
+ 80001aa:	7bdb      	ldrb	r3, [r3, #15]
+ 80001ac:	3b1a      	subs	r3, #26
+ 80001ae:	3318      	adds	r3, #24
+ 80001b0:	011b      	lsls	r3, r3, #4
+ 80001b2:	4413      	add	r3, r2
+ 80001b4:	2200      	movs	r2, #0
+ 80001b6:	601a      	str	r2, [r3, #0]
+
+		/* Reset the value of DLC bits before setting it*/
+		( CAN->TxMailBox[(msg->MailBoxNum-MailBox_Shift)].TDTR ) &= ~ (CAN_TIDR_DLC_ResetMask) ;
+ 80001b8:	4a4b      	ldr	r2, [pc, #300]	; (80002e8 <MCAN_voidSendMessage+0x15c>)
+ 80001ba:	687b      	ldr	r3, [r7, #4]
+ 80001bc:	7bdb      	ldrb	r3, [r3, #15]
+ 80001be:	3b1a      	subs	r3, #26
+ 80001c0:	3318      	adds	r3, #24
+ 80001c2:	011b      	lsls	r3, r3, #4
+ 80001c4:	4413      	add	r3, r2
+ 80001c6:	3304      	adds	r3, #4
+ 80001c8:	681a      	ldr	r2, [r3, #0]
+ 80001ca:	4947      	ldr	r1, [pc, #284]	; (80002e8 <MCAN_voidSendMessage+0x15c>)
+ 80001cc:	687b      	ldr	r3, [r7, #4]
+ 80001ce:	7bdb      	ldrb	r3, [r3, #15]
+ 80001d0:	3b1a      	subs	r3, #26
+ 80001d2:	f022 020f 	bic.w	r2, r2, #15
+ 80001d6:	3318      	adds	r3, #24
+ 80001d8:	011b      	lsls	r3, r3, #4
+ 80001da:	440b      	add	r3, r1
+ 80001dc:	3304      	adds	r3, #4
+ 80001de:	601a      	str	r2, [r3, #0]
+
+		/* Set the Data Length Code Value */
+		( CAN->TxMailBox[(msg->MailBoxNum-MailBox_Shift)].TDTR ) |=  (msg->Len) ;
+ 80001e0:	4a41      	ldr	r2, [pc, #260]	; (80002e8 <MCAN_voidSendMessage+0x15c>)
+ 80001e2:	687b      	ldr	r3, [r7, #4]
+ 80001e4:	7bdb      	ldrb	r3, [r3, #15]
+ 80001e6:	3b1a      	subs	r3, #26
+ 80001e8:	3318      	adds	r3, #24
+ 80001ea:	011b      	lsls	r3, r3, #4
+ 80001ec:	4413      	add	r3, r2
+ 80001ee:	3304      	adds	r3, #4
+ 80001f0:	681a      	ldr	r2, [r3, #0]
+ 80001f2:	687b      	ldr	r3, [r7, #4]
+ 80001f4:	7b1b      	ldrb	r3, [r3, #12]
+ 80001f6:	4618      	mov	r0, r3
+ 80001f8:	493b      	ldr	r1, [pc, #236]	; (80002e8 <MCAN_voidSendMessage+0x15c>)
+ 80001fa:	687b      	ldr	r3, [r7, #4]
+ 80001fc:	7bdb      	ldrb	r3, [r3, #15]
+ 80001fe:	3b1a      	subs	r3, #26
+ 8000200:	4302      	orrs	r2, r0
+ 8000202:	3318      	adds	r3, #24
+ 8000204:	011b      	lsls	r3, r3, #4
+ 8000206:	440b      	add	r3, r1
+ 8000208:	3304      	adds	r3, #4
+ 800020a:	601a      	str	r2, [r3, #0]
+
+		/* Check on the ID format Standard or Extended */
+		/* Standard Format Execution program */
+		if(msg->Format == CAN_MSG_Standard_Format)
+ 800020c:	687b      	ldr	r3, [r7, #4]
+ 800020e:	7b5b      	ldrb	r3, [r3, #13]
+ 8000210:	2b00      	cmp	r3, #0
+ 8000212:	d110      	bne.n	8000236 <MCAN_voidSendMessage+0xaa>
+			   * Set the ID
+			   * Set the Frame Remote Transmission Request
+			   * Set the Standard Frame Format
+			   */
+			  CAN->TxMailBox[(msg->MailBoxNum-MailBox_Shift)].TIR =
+				  (  (msg->ID << CAN_TIR_Standard_StartBit) | (CAN_MSG_Standard_Format << CAN_TIR_IDE_Bit)
+ 8000214:	687b      	ldr	r3, [r7, #4]
+ 8000216:	681b      	ldr	r3, [r3, #0]
+ 8000218:	055a      	lsls	r2, r3, #21
+				   | (msg->Type << CAN_TIR_RTR_Bit		  ));
+ 800021a:	687b      	ldr	r3, [r7, #4]
+ 800021c:	7b9b      	ldrb	r3, [r3, #14]
+ 800021e:	005b      	lsls	r3, r3, #1
+ 8000220:	4618      	mov	r0, r3
+			  CAN->TxMailBox[(msg->MailBoxNum-MailBox_Shift)].TIR =
+ 8000222:	4931      	ldr	r1, [pc, #196]	; (80002e8 <MCAN_voidSendMessage+0x15c>)
+ 8000224:	687b      	ldr	r3, [r7, #4]
+ 8000226:	7bdb      	ldrb	r3, [r3, #15]
+ 8000228:	3b1a      	subs	r3, #26
+				   | (msg->Type << CAN_TIR_RTR_Bit		  ));
+ 800022a:	4302      	orrs	r2, r0
+			  CAN->TxMailBox[(msg->MailBoxNum-MailBox_Shift)].TIR =
+ 800022c:	3318      	adds	r3, #24
+ 800022e:	011b      	lsls	r3, r3, #4
+ 8000230:	440b      	add	r3, r1
+ 8000232:	601a      	str	r2, [r3, #0]
+ 8000234:	e010      	b.n	8000258 <MCAN_voidSendMessage+0xcc>
+			   * Set the ID
+			   * Set the Frame Remote Transmission Request
+			   * Set the Extended Frame Format
+			   */
+			  CAN->TxMailBox[(msg->MailBoxNum-MailBox_Shift)].TIR=
+				  (  (msg->ID << CAN_TIR_Standard_StartBit) | (CAN_MSG_Extended_Format << CAN_TIR_IDE_Bit)
+ 8000236:	687b      	ldr	r3, [r7, #4]
+ 8000238:	681b      	ldr	r3, [r3, #0]
+ 800023a:	055b      	lsls	r3, r3, #21
+				   | (msg->Type << CAN_TIR_RTR_Bit));
+ 800023c:	687a      	ldr	r2, [r7, #4]
+ 800023e:	7b92      	ldrb	r2, [r2, #14]
+ 8000240:	0052      	lsls	r2, r2, #1
+ 8000242:	431a      	orrs	r2, r3
+			  CAN->TxMailBox[(msg->MailBoxNum-MailBox_Shift)].TIR=
+ 8000244:	4928      	ldr	r1, [pc, #160]	; (80002e8 <MCAN_voidSendMessage+0x15c>)
+ 8000246:	687b      	ldr	r3, [r7, #4]
+ 8000248:	7bdb      	ldrb	r3, [r3, #15]
+ 800024a:	3b1a      	subs	r3, #26
+				   | (msg->Type << CAN_TIR_RTR_Bit));
+ 800024c:	f042 0204 	orr.w	r2, r2, #4
+			  CAN->TxMailBox[(msg->MailBoxNum-MailBox_Shift)].TIR=
+ 8000250:	3318      	adds	r3, #24
+ 8000252:	011b      	lsls	r3, r3, #4
+ 8000254:	440b      	add	r3, r1
+ 8000256:	601a      	str	r2, [r3, #0]
+		}
+
+		/* Data Input in the Low Data Register */
+		CAN->TxMailBox[((msg->MailBoxNum)-MailBox_Shift)].TDLR = ( (msg->Data[0] << CAN_DATA_BYTE0_Shift)
+ 8000258:	687b      	ldr	r3, [r7, #4]
+ 800025a:	791b      	ldrb	r3, [r3, #4]
+ 800025c:	461a      	mov	r2, r3
+				 	 	 	 	 	 	 	 	 	 	 	 	 | (msg->Data[1] << CAN_DATA_BYTE1_Shift)
+ 800025e:	687b      	ldr	r3, [r7, #4]
+ 8000260:	795b      	ldrb	r3, [r3, #5]
+ 8000262:	021b      	lsls	r3, r3, #8
+ 8000264:	431a      	orrs	r2, r3
+																 | (msg->Data[2] << CAN_DATA_BYTE2_Shift)
+ 8000266:	687b      	ldr	r3, [r7, #4]
+ 8000268:	799b      	ldrb	r3, [r3, #6]
+ 800026a:	041b      	lsls	r3, r3, #16
+ 800026c:	431a      	orrs	r2, r3
+																 | (msg->Data[3] << CAN_DATA_BYTE3_Shift) );
+ 800026e:	687b      	ldr	r3, [r7, #4]
+ 8000270:	79db      	ldrb	r3, [r3, #7]
+ 8000272:	061b      	lsls	r3, r3, #24
+ 8000274:	ea42 0103 	orr.w	r1, r2, r3
+		CAN->TxMailBox[((msg->MailBoxNum)-MailBox_Shift)].TDLR = ( (msg->Data[0] << CAN_DATA_BYTE0_Shift)
+ 8000278:	4a1b      	ldr	r2, [pc, #108]	; (80002e8 <MCAN_voidSendMessage+0x15c>)
+ 800027a:	687b      	ldr	r3, [r7, #4]
+ 800027c:	7bdb      	ldrb	r3, [r3, #15]
+ 800027e:	3b1a      	subs	r3, #26
+ 8000280:	011b      	lsls	r3, r3, #4
+ 8000282:	4413      	add	r3, r2
+ 8000284:	f503 73c4 	add.w	r3, r3, #392	; 0x188
+ 8000288:	6019      	str	r1, [r3, #0]
+		/* Data Input in the High Data Register */
+		CAN->TxMailBox[((msg->MailBoxNum)-MailBox_Shift)].TDHR = ( (msg->Data[4] << CAN_DATA_BYTE0_Shift)
+ 800028a:	687b      	ldr	r3, [r7, #4]
+ 800028c:	7a1b      	ldrb	r3, [r3, #8]
+ 800028e:	461a      	mov	r2, r3
+						 	 	 	 	 	 	 	 	 	 	 | (msg->Data[5] << CAN_DATA_BYTE1_Shift)
+ 8000290:	687b      	ldr	r3, [r7, #4]
+ 8000292:	7a5b      	ldrb	r3, [r3, #9]
+ 8000294:	021b      	lsls	r3, r3, #8
+ 8000296:	431a      	orrs	r2, r3
+																 | (msg->Data[6] << CAN_DATA_BYTE2_Shift)
+ 8000298:	687b      	ldr	r3, [r7, #4]
+ 800029a:	7a9b      	ldrb	r3, [r3, #10]
+ 800029c:	041b      	lsls	r3, r3, #16
+ 800029e:	431a      	orrs	r2, r3
+																 | (msg->Data[7] << CAN_DATA_BYTE3_Shift) );
+ 80002a0:	687b      	ldr	r3, [r7, #4]
+ 80002a2:	7adb      	ldrb	r3, [r3, #11]
+ 80002a4:	061b      	lsls	r3, r3, #24
+ 80002a6:	ea42 0103 	orr.w	r1, r2, r3
+		CAN->TxMailBox[((msg->MailBoxNum)-MailBox_Shift)].TDHR = ( (msg->Data[4] << CAN_DATA_BYTE0_Shift)
+ 80002aa:	4a0f      	ldr	r2, [pc, #60]	; (80002e8 <MCAN_voidSendMessage+0x15c>)
+ 80002ac:	687b      	ldr	r3, [r7, #4]
+ 80002ae:	7bdb      	ldrb	r3, [r3, #15]
+ 80002b0:	3b1a      	subs	r3, #26
+ 80002b2:	011b      	lsls	r3, r3, #4
+ 80002b4:	4413      	add	r3, r2
+ 80002b6:	f503 73c6 	add.w	r3, r3, #396	; 0x18c
+ 80002ba:	6019      	str	r1, [r3, #0]
+
+		/* Transmit MailBox Request (Send Message) */
+		SET_BIT(CAN->TxMailBox[((msg->MailBoxNum)-MailBox_Shift)].TIR ,CAN_TIR_TXRQ_Bit);
+ 80002bc:	4a0a      	ldr	r2, [pc, #40]	; (80002e8 <MCAN_voidSendMessage+0x15c>)
+ 80002be:	687b      	ldr	r3, [r7, #4]
+ 80002c0:	7bdb      	ldrb	r3, [r3, #15]
+ 80002c2:	3b1a      	subs	r3, #26
+ 80002c4:	3318      	adds	r3, #24
+ 80002c6:	011b      	lsls	r3, r3, #4
+ 80002c8:	4413      	add	r3, r2
+ 80002ca:	681a      	ldr	r2, [r3, #0]
+ 80002cc:	4906      	ldr	r1, [pc, #24]	; (80002e8 <MCAN_voidSendMessage+0x15c>)
+ 80002ce:	687b      	ldr	r3, [r7, #4]
+ 80002d0:	7bdb      	ldrb	r3, [r3, #15]
+ 80002d2:	3b1a      	subs	r3, #26
+ 80002d4:	f042 0201 	orr.w	r2, r2, #1
+ 80002d8:	3318      	adds	r3, #24
+ 80002da:	011b      	lsls	r3, r3, #4
+ 80002dc:	440b      	add	r3, r1
+ 80002de:	601a      	str	r2, [r3, #0]
+	else
+	{
+		//Do Nothing
+	}
+
+}
+ 80002e0:	bf00      	nop
+ 80002e2:	3708      	adds	r7, #8
+ 80002e4:	46bd      	mov	sp, r7
+ 80002e6:	bd80      	pop	{r7, pc}
+ 80002e8:	40006400 	.word	0x40006400
+
+080002ec <MCAN_voidReadMessage>:
+/*I/P Parameters: CAN_Msg *msg																*/
+/*Returns:it returns nothing	                            							    */
+/*Desc:This Function Receives a message throw the CAN 				                        */
+/********************************************************************************************/
+void MCAN_voidReadMessage(CAN_Msg *msg, u8 Copy_u8FIFONumber)
+{
+ 80002ec:	b480      	push	{r7}
+ 80002ee:	b083      	sub	sp, #12
+ 80002f0:	af00      	add	r7, sp, #0
+ 80002f2:	6078      	str	r0, [r7, #4]
+ 80002f4:	460b      	mov	r3, r1
+ 80002f6:	70fb      	strb	r3, [r7, #3]
+	/* Input Validation */
+	if (Copy_u8FIFONumber > 1)
+ 80002f8:	78fb      	ldrb	r3, [r7, #3]
+ 80002fa:	2b01      	cmp	r3, #1
+ 80002fc:	f200 80ac 	bhi.w	8000458 <MCAN_voidReadMessage+0x16c>
+	{
+		return;
+	}
+
+	if (GET_BIT(CAN->RxFIFOMailBox[Copy_u8FIFONumber].RIR,CAN_RIR_IDE_Bit)==0)
+ 8000300:	4a58      	ldr	r2, [pc, #352]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 8000302:	78fb      	ldrb	r3, [r7, #3]
+ 8000304:	331b      	adds	r3, #27
+ 8000306:	011b      	lsls	r3, r3, #4
+ 8000308:	4413      	add	r3, r2
+ 800030a:	681b      	ldr	r3, [r3, #0]
+ 800030c:	085b      	lsrs	r3, r3, #1
+ 800030e:	f003 0301 	and.w	r3, r3, #1
+ 8000312:	2b00      	cmp	r3, #0
+ 8000314:	d10e      	bne.n	8000334 <MCAN_voidReadMessage+0x48>
+	{
+		/* Standard Format Assign to the message */
+		msg->Format= CAN_MSG_Standard_Format;
+ 8000316:	687b      	ldr	r3, [r7, #4]
+ 8000318:	2200      	movs	r2, #0
+ 800031a:	735a      	strb	r2, [r3, #13]
+		/* Assign ID to the Message ID */
+		msg->ID=CAN_Standard_formatMask & (CAN->RxFIFOMailBox[Copy_u8FIFONumber].RIR >> CAN_FIFO_SID_Shift);
+ 800031c:	4a51      	ldr	r2, [pc, #324]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 800031e:	78fb      	ldrb	r3, [r7, #3]
+ 8000320:	331b      	adds	r3, #27
+ 8000322:	011b      	lsls	r3, r3, #4
+ 8000324:	4413      	add	r3, r2
+ 8000326:	681b      	ldr	r3, [r3, #0]
+ 8000328:	0d5b      	lsrs	r3, r3, #21
+ 800032a:	f3c3 020a 	ubfx	r2, r3, #0, #11
+ 800032e:	687b      	ldr	r3, [r7, #4]
+ 8000330:	601a      	str	r2, [r3, #0]
+ 8000332:	e00d      	b.n	8000350 <MCAN_voidReadMessage+0x64>
+	}
+	else
+	{
+		/* Extended Format Assign to the message */
+		msg->Format= CAN_MSG_Extended_Format;
+ 8000334:	687b      	ldr	r3, [r7, #4]
+ 8000336:	2201      	movs	r2, #1
+ 8000338:	735a      	strb	r2, [r3, #13]
+		/* Assign ID to the Message ID */
+		msg->ID=CAN_Extended_formatMask & (CAN->RxFIFOMailBox[Copy_u8FIFONumber].RIR >> CAN_FIFO_EID_Shift);
+ 800033a:	4a4a      	ldr	r2, [pc, #296]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 800033c:	78fb      	ldrb	r3, [r7, #3]
+ 800033e:	331b      	adds	r3, #27
+ 8000340:	011b      	lsls	r3, r3, #4
+ 8000342:	4413      	add	r3, r2
+ 8000344:	681b      	ldr	r3, [r3, #0]
+ 8000346:	08db      	lsrs	r3, r3, #3
+ 8000348:	f3c3 0211 	ubfx	r2, r3, #0, #18
+ 800034c:	687b      	ldr	r3, [r7, #4]
+ 800034e:	601a      	str	r2, [r3, #0]
+	}
+
+	/* Assign the message type if DATA or REQUEST */
+	msg->Type=GET_BIT(CAN->RxFIFOMailBox[Copy_u8FIFONumber].RIR,CAN_RIR_RTR_Bit);
+ 8000350:	4a44      	ldr	r2, [pc, #272]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 8000352:	78fb      	ldrb	r3, [r7, #3]
+ 8000354:	331b      	adds	r3, #27
+ 8000356:	011b      	lsls	r3, r3, #4
+ 8000358:	4413      	add	r3, r2
+ 800035a:	681b      	ldr	r3, [r3, #0]
+ 800035c:	085b      	lsrs	r3, r3, #1
+ 800035e:	b2db      	uxtb	r3, r3
+ 8000360:	f003 0301 	and.w	r3, r3, #1
+ 8000364:	b2da      	uxtb	r2, r3
+ 8000366:	687b      	ldr	r3, [r7, #4]
+ 8000368:	739a      	strb	r2, [r3, #14]
+	/* Assign the Data Size */
+	msg->Len=CAN_DLC_MASK & (CAN->RxFIFOMailBox[Copy_u8FIFONumber].RDTR);
+ 800036a:	4a3e      	ldr	r2, [pc, #248]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 800036c:	78fb      	ldrb	r3, [r7, #3]
+ 800036e:	331b      	adds	r3, #27
+ 8000370:	011b      	lsls	r3, r3, #4
+ 8000372:	4413      	add	r3, r2
+ 8000374:	3304      	adds	r3, #4
+ 8000376:	681b      	ldr	r3, [r3, #0]
+ 8000378:	b2db      	uxtb	r3, r3
+ 800037a:	f003 030f 	and.w	r3, r3, #15
+ 800037e:	b2da      	uxtb	r2, r3
+ 8000380:	687b      	ldr	r3, [r7, #4]
+ 8000382:	731a      	strb	r2, [r3, #12]
+
+	/* Assigning the Low Register Data in the Data Array */
+	msg->Data[0]= CAN_DATA_MASK & (CAN->RxFIFOMailBox[Copy_u8FIFONumber].RDLR >>CAN_DATA_BYTE0_Shift);
+ 8000384:	4a37      	ldr	r2, [pc, #220]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 8000386:	78fb      	ldrb	r3, [r7, #3]
+ 8000388:	011b      	lsls	r3, r3, #4
+ 800038a:	4413      	add	r3, r2
+ 800038c:	f503 73dc 	add.w	r3, r3, #440	; 0x1b8
+ 8000390:	681b      	ldr	r3, [r3, #0]
+ 8000392:	b2da      	uxtb	r2, r3
+ 8000394:	687b      	ldr	r3, [r7, #4]
+ 8000396:	711a      	strb	r2, [r3, #4]
+	msg->Data[1]= CAN_DATA_MASK & (CAN->RxFIFOMailBox[Copy_u8FIFONumber].RDLR >>CAN_DATA_BYTE1_Shift);
+ 8000398:	4a32      	ldr	r2, [pc, #200]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 800039a:	78fb      	ldrb	r3, [r7, #3]
+ 800039c:	011b      	lsls	r3, r3, #4
+ 800039e:	4413      	add	r3, r2
+ 80003a0:	f503 73dc 	add.w	r3, r3, #440	; 0x1b8
+ 80003a4:	681b      	ldr	r3, [r3, #0]
+ 80003a6:	0a1b      	lsrs	r3, r3, #8
+ 80003a8:	b2da      	uxtb	r2, r3
+ 80003aa:	687b      	ldr	r3, [r7, #4]
+ 80003ac:	715a      	strb	r2, [r3, #5]
+	msg->Data[2]= CAN_DATA_MASK & (CAN->RxFIFOMailBox[Copy_u8FIFONumber].RDLR >>CAN_DATA_BYTE2_Shift);
+ 80003ae:	4a2d      	ldr	r2, [pc, #180]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 80003b0:	78fb      	ldrb	r3, [r7, #3]
+ 80003b2:	011b      	lsls	r3, r3, #4
+ 80003b4:	4413      	add	r3, r2
+ 80003b6:	f503 73dc 	add.w	r3, r3, #440	; 0x1b8
+ 80003ba:	681b      	ldr	r3, [r3, #0]
+ 80003bc:	0c1b      	lsrs	r3, r3, #16
+ 80003be:	b2da      	uxtb	r2, r3
+ 80003c0:	687b      	ldr	r3, [r7, #4]
+ 80003c2:	719a      	strb	r2, [r3, #6]
+	msg->Data[3]= CAN_DATA_MASK & (CAN->RxFIFOMailBox[Copy_u8FIFONumber].RDLR >>CAN_DATA_BYTE3_Shift);
+ 80003c4:	4a27      	ldr	r2, [pc, #156]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 80003c6:	78fb      	ldrb	r3, [r7, #3]
+ 80003c8:	011b      	lsls	r3, r3, #4
+ 80003ca:	4413      	add	r3, r2
+ 80003cc:	f503 73dc 	add.w	r3, r3, #440	; 0x1b8
+ 80003d0:	681b      	ldr	r3, [r3, #0]
+ 80003d2:	0e1b      	lsrs	r3, r3, #24
+ 80003d4:	b2da      	uxtb	r2, r3
+ 80003d6:	687b      	ldr	r3, [r7, #4]
+ 80003d8:	71da      	strb	r2, [r3, #7]
+	/* Assigning the High Register Data in the Data Array */
+	msg->Data[4]= CAN_DATA_MASK & (CAN->RxFIFOMailBox[Copy_u8FIFONumber].RDHR >>CAN_DATA_BYTE0_Shift);
+ 80003da:	4a22      	ldr	r2, [pc, #136]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 80003dc:	78fb      	ldrb	r3, [r7, #3]
+ 80003de:	011b      	lsls	r3, r3, #4
+ 80003e0:	4413      	add	r3, r2
+ 80003e2:	f503 73de 	add.w	r3, r3, #444	; 0x1bc
+ 80003e6:	681b      	ldr	r3, [r3, #0]
+ 80003e8:	b2da      	uxtb	r2, r3
+ 80003ea:	687b      	ldr	r3, [r7, #4]
+ 80003ec:	721a      	strb	r2, [r3, #8]
+	msg->Data[5]= CAN_DATA_MASK & (CAN->RxFIFOMailBox[Copy_u8FIFONumber].RDHR >>CAN_DATA_BYTE1_Shift);
+ 80003ee:	4a1d      	ldr	r2, [pc, #116]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 80003f0:	78fb      	ldrb	r3, [r7, #3]
+ 80003f2:	011b      	lsls	r3, r3, #4
+ 80003f4:	4413      	add	r3, r2
+ 80003f6:	f503 73de 	add.w	r3, r3, #444	; 0x1bc
+ 80003fa:	681b      	ldr	r3, [r3, #0]
+ 80003fc:	0a1b      	lsrs	r3, r3, #8
+ 80003fe:	b2da      	uxtb	r2, r3
+ 8000400:	687b      	ldr	r3, [r7, #4]
+ 8000402:	725a      	strb	r2, [r3, #9]
+	msg->Data[6]= CAN_DATA_MASK & (CAN->RxFIFOMailBox[Copy_u8FIFONumber].RDHR >>CAN_DATA_BYTE2_Shift);
+ 8000404:	4a17      	ldr	r2, [pc, #92]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 8000406:	78fb      	ldrb	r3, [r7, #3]
+ 8000408:	011b      	lsls	r3, r3, #4
+ 800040a:	4413      	add	r3, r2
+ 800040c:	f503 73de 	add.w	r3, r3, #444	; 0x1bc
+ 8000410:	681b      	ldr	r3, [r3, #0]
+ 8000412:	0c1b      	lsrs	r3, r3, #16
+ 8000414:	b2da      	uxtb	r2, r3
+ 8000416:	687b      	ldr	r3, [r7, #4]
+ 8000418:	729a      	strb	r2, [r3, #10]
+	msg->Data[7]= CAN_DATA_MASK & (CAN->RxFIFOMailBox[Copy_u8FIFONumber].RDHR >>CAN_DATA_BYTE3_Shift);
+ 800041a:	4a12      	ldr	r2, [pc, #72]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 800041c:	78fb      	ldrb	r3, [r7, #3]
+ 800041e:	011b      	lsls	r3, r3, #4
+ 8000420:	4413      	add	r3, r2
+ 8000422:	f503 73de 	add.w	r3, r3, #444	; 0x1bc
+ 8000426:	681b      	ldr	r3, [r3, #0]
+ 8000428:	0e1b      	lsrs	r3, r3, #24
+ 800042a:	b2da      	uxtb	r2, r3
+ 800042c:	687b      	ldr	r3, [r7, #4]
+ 800042e:	72da      	strb	r2, [r3, #11]
+
+	/* Release the FIFO Mailbox */
+	if (Copy_u8FIFONumber==0)
+ 8000430:	78fb      	ldrb	r3, [r7, #3]
+ 8000432:	2b00      	cmp	r3, #0
+ 8000434:	d106      	bne.n	8000444 <MCAN_voidReadMessage+0x158>
+	{
+		SET_BIT(CAN->RF0R,CAN_RF0R_RFOM0); //Release FIFO 0
+ 8000436:	4b0b      	ldr	r3, [pc, #44]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 8000438:	68db      	ldr	r3, [r3, #12]
+ 800043a:	4a0a      	ldr	r2, [pc, #40]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 800043c:	f043 0320 	orr.w	r3, r3, #32
+ 8000440:	60d3      	str	r3, [r2, #12]
+ 8000442:	e00a      	b.n	800045a <MCAN_voidReadMessage+0x16e>
+	}
+	else if (Copy_u8FIFONumber==1)
+ 8000444:	78fb      	ldrb	r3, [r7, #3]
+ 8000446:	2b01      	cmp	r3, #1
+ 8000448:	d107      	bne.n	800045a <MCAN_voidReadMessage+0x16e>
+	{
+		SET_BIT(CAN->RF1R,CAN_RF1R_RFOM1); //Release FIFO 1
+ 800044a:	4b06      	ldr	r3, [pc, #24]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 800044c:	691b      	ldr	r3, [r3, #16]
+ 800044e:	4a05      	ldr	r2, [pc, #20]	; (8000464 <MCAN_voidReadMessage+0x178>)
+ 8000450:	f043 0320 	orr.w	r3, r3, #32
+ 8000454:	6113      	str	r3, [r2, #16]
+ 8000456:	e000      	b.n	800045a <MCAN_voidReadMessage+0x16e>
+		return;
+ 8000458:	bf00      	nop
+	}
+}
+ 800045a:	370c      	adds	r7, #12
+ 800045c:	46bd      	mov	sp, r7
+ 800045e:	bc80      	pop	{r7}
+ 8000460:	4770      	bx	lr
+ 8000462:	bf00      	nop
+ 8000464:	40006400 	.word	0x40006400
+
+08000468 <MCAN_u8CheckReady>:
+/*Desc:This Function checks on the mailbox ready to transmit or not                         */
+/********************************************************************************************/
+/* Number of Mailbox Options    :- CAN_TSR_TME0	- CAN_TSR_TME1 - CAN_TSR_TME2				*/
+/********************************************************************************************/
+u8 MCAN_u8CheckReady(u8 copy_u8MailBoxNum)
+{
+ 8000468:	b480      	push	{r7}
+ 800046a:	b085      	sub	sp, #20
+ 800046c:	af00      	add	r7, sp, #0
+ 800046e:	4603      	mov	r3, r0
+ 8000470:	71fb      	strb	r3, [r7, #7]
+
+	CAN_TxRdy[(copy_u8MailBoxNum-MailBox_Shift)]= CAN_Rdy; // Set the Ready Transmission to Ready
+ 8000472:	79fb      	ldrb	r3, [r7, #7]
+ 8000474:	3b1a      	subs	r3, #26
+ 8000476:	4a13      	ldr	r2, [pc, #76]	; (80004c4 <MCAN_u8CheckReady+0x5c>)
+ 8000478:	2101      	movs	r1, #1
+ 800047a:	54d1      	strb	r1, [r2, r3]
+	u16 local_u16Counter=0; 							   // Local Counter for Time Run out Error
+ 800047c:	2300      	movs	r3, #0
+ 800047e:	81fb      	strh	r3, [r7, #14]
+    while(GET_BIT(CAN->TSR,copy_u8MailBoxNum)==0)          // Pull on the Flag
+ 8000480:	e00d      	b.n	800049e <MCAN_u8CheckReady+0x36>
+	{
+    	/*That's means that MailBox isn't empty*/
+		local_u16Counter++;                                // Update the Local Counter
+ 8000482:	89fb      	ldrh	r3, [r7, #14]
+ 8000484:	3301      	adds	r3, #1
+ 8000486:	81fb      	strh	r3, [r7, #14]
+		if (local_u16Counter == TimeOut)	 			   // Check on the value of the Local Counter
+ 8000488:	89fb      	ldrh	r3, [r7, #14]
+ 800048a:	f241 3288 	movw	r2, #5000	; 0x1388
+ 800048e:	4293      	cmp	r3, r2
+ 8000490:	d105      	bne.n	800049e <MCAN_u8CheckReady+0x36>
+		{
+			/* If Time Ran out the Ready Transmission will be not Ready */
+			CAN_TxRdy[(copy_u8MailBoxNum-MailBox_Shift)]= CAN_NotRdy;
+ 8000492:	79fb      	ldrb	r3, [r7, #7]
+ 8000494:	3b1a      	subs	r3, #26
+ 8000496:	4a0b      	ldr	r2, [pc, #44]	; (80004c4 <MCAN_u8CheckReady+0x5c>)
+ 8000498:	2100      	movs	r1, #0
+ 800049a:	54d1      	strb	r1, [r2, r3]
+			break;                                         // break the loops because of infinity loop
+ 800049c:	e008      	b.n	80004b0 <MCAN_u8CheckReady+0x48>
+    while(GET_BIT(CAN->TSR,copy_u8MailBoxNum)==0)          // Pull on the Flag
+ 800049e:	4b0a      	ldr	r3, [pc, #40]	; (80004c8 <MCAN_u8CheckReady+0x60>)
+ 80004a0:	689a      	ldr	r2, [r3, #8]
+ 80004a2:	79fb      	ldrb	r3, [r7, #7]
+ 80004a4:	fa22 f303 	lsr.w	r3, r2, r3
+ 80004a8:	f003 0301 	and.w	r3, r3, #1
+ 80004ac:	2b00      	cmp	r3, #0
+ 80004ae:	d0e8      	beq.n	8000482 <MCAN_u8CheckReady+0x1a>
+		}
+	}
+	return CAN_TxRdy[(copy_u8MailBoxNum-MailBox_Shift)];   // Return the Call to the caller Function
+ 80004b0:	79fb      	ldrb	r3, [r7, #7]
+ 80004b2:	3b1a      	subs	r3, #26
+ 80004b4:	4a03      	ldr	r2, [pc, #12]	; (80004c4 <MCAN_u8CheckReady+0x5c>)
+ 80004b6:	5cd3      	ldrb	r3, [r2, r3]
+}
+ 80004b8:	4618      	mov	r0, r3
+ 80004ba:	3714      	adds	r7, #20
+ 80004bc:	46bd      	mov	sp, r7
+ 80004be:	bc80      	pop	{r7}
+ 80004c0:	4770      	bx	lr
+ 80004c2:	bf00      	nop
+ 80004c4:	2000001c 	.word	0x2000001c
+ 80004c8:	40006400 	.word	0x40006400
+
+080004cc <MCAN_voidCreateMessage>:
+/* Data Type                    :- CAN_MSG_DataFrame - CAN_MSG_RemoteFram					*/
+/* Number of Mailbox            :- CAN_TSR_TME0	- CAN_TSR_TME1 - CAN_TSR_TME2				*/
+/********************************************************************************************/
+void MCAN_voidCreateMessage (u32 copy_u32ID, u32 copy_u32LowData, u32 copy_u32HighData, u8 copy_u8Length, u8 copy_u8Format,
+		                     u8 copy_u8Type, u8 copy_u8Mailbox, CAN_Msg *msg)
+{
+ 80004cc:	b480      	push	{r7}
+ 80004ce:	b085      	sub	sp, #20
+ 80004d0:	af00      	add	r7, sp, #0
+ 80004d2:	60f8      	str	r0, [r7, #12]
+ 80004d4:	60b9      	str	r1, [r7, #8]
+ 80004d6:	607a      	str	r2, [r7, #4]
+ 80004d8:	70fb      	strb	r3, [r7, #3]
+	/* Assigning The ID in the Structure */
+	msg->ID         = copy_u32ID;
+ 80004da:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 80004dc:	68fa      	ldr	r2, [r7, #12]
+ 80004de:	601a      	str	r2, [r3, #0]
+	/* Assigning The Data Length Code in the Structure */
+	msg->Len        = copy_u8Length;
+ 80004e0:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 80004e2:	78fa      	ldrb	r2, [r7, #3]
+ 80004e4:	731a      	strb	r2, [r3, #12]
+	/* Assigning The Format Standard or Extended in the Structure */
+	msg->Format     = copy_u8Format;
+ 80004e6:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 80004e8:	7e3a      	ldrb	r2, [r7, #24]
+ 80004ea:	735a      	strb	r2, [r3, #13]
+	/* Assigning The Type of message in the Structure */
+	msg->Type       = copy_u8Type;
+ 80004ec:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 80004ee:	7f3a      	ldrb	r2, [r7, #28]
+ 80004f0:	739a      	strb	r2, [r3, #14]
+	/* Assigning The Mailbox number in the Structure */
+	msg->MailBoxNum = copy_u8Mailbox;
+ 80004f2:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 80004f4:	f897 2020 	ldrb.w	r2, [r7, #32]
+ 80004f8:	73da      	strb	r2, [r3, #15]
+	/********************************************************/
+	/* Assigning The Data number in the Structure           */
+	/********************************************************/
+	/* Data Byte Number 1 Assign in the data array          */
+	msg->Data[0]=(copy_u32LowData >>  CAN_DATA_BYTE0_Shift);
+ 80004fa:	68bb      	ldr	r3, [r7, #8]
+ 80004fc:	b2da      	uxtb	r2, r3
+ 80004fe:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 8000500:	711a      	strb	r2, [r3, #4]
+	/* Data Byte Number 2 Assign in the data array          */
+	msg->Data[1]=(copy_u32LowData >>  CAN_DATA_BYTE1_Shift);
+ 8000502:	68bb      	ldr	r3, [r7, #8]
+ 8000504:	0a1b      	lsrs	r3, r3, #8
+ 8000506:	b2da      	uxtb	r2, r3
+ 8000508:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 800050a:	715a      	strb	r2, [r3, #5]
+	/* Data Byte Number 3 Assign in the data array          */
+	msg->Data[2]=(copy_u32LowData >>  CAN_DATA_BYTE2_Shift);
+ 800050c:	68bb      	ldr	r3, [r7, #8]
+ 800050e:	0c1b      	lsrs	r3, r3, #16
+ 8000510:	b2da      	uxtb	r2, r3
+ 8000512:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 8000514:	719a      	strb	r2, [r3, #6]
+	/* Data Byte Number 4 Assign in the data array          */
+	msg->Data[3]=(copy_u32LowData >>  CAN_DATA_BYTE3_Shift);
+ 8000516:	68bb      	ldr	r3, [r7, #8]
+ 8000518:	0e1b      	lsrs	r3, r3, #24
+ 800051a:	b2da      	uxtb	r2, r3
+ 800051c:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 800051e:	71da      	strb	r2, [r3, #7]
+	/* Data Byte Number 5 Assign in the data array          */
+	msg->Data[4]=(copy_u32HighData >> CAN_DATA_BYTE0_Shift);
+ 8000520:	687b      	ldr	r3, [r7, #4]
+ 8000522:	b2da      	uxtb	r2, r3
+ 8000524:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 8000526:	721a      	strb	r2, [r3, #8]
+	/* Data Byte Number 6 Assign in the data array          */
+	msg->Data[5]=(copy_u32HighData >> CAN_DATA_BYTE1_Shift);
+ 8000528:	687b      	ldr	r3, [r7, #4]
+ 800052a:	0a1b      	lsrs	r3, r3, #8
+ 800052c:	b2da      	uxtb	r2, r3
+ 800052e:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 8000530:	725a      	strb	r2, [r3, #9]
+	/* Data Byte Number 7 Assign in the data array          */
+	msg->Data[6]=(copy_u32HighData >> CAN_DATA_BYTE2_Shift);
+ 8000532:	687b      	ldr	r3, [r7, #4]
+ 8000534:	0c1b      	lsrs	r3, r3, #16
+ 8000536:	b2da      	uxtb	r2, r3
+ 8000538:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 800053a:	729a      	strb	r2, [r3, #10]
+	/* Data Byte Number 8 Assign in the data array          */
+	msg->Data[7]=(copy_u32HighData >> CAN_DATA_BYTE3_Shift);
+ 800053c:	687b      	ldr	r3, [r7, #4]
+ 800053e:	0e1b      	lsrs	r3, r3, #24
+ 8000540:	b2da      	uxtb	r2, r3
+ 8000542:	6a7b      	ldr	r3, [r7, #36]	; 0x24
+ 8000544:	72da      	strb	r2, [r3, #11]
+	/********************************************************/
+}
+ 8000546:	bf00      	nop
+ 8000548:	3714      	adds	r7, #20
+ 800054a:	46bd      	mov	sp, r7
+ 800054c:	bc80      	pop	{r7}
+ 800054e:	4770      	bx	lr
+
+08000550 <MCAN_voidSetup>:
+/*I/P Parameters: void																	    */
+/*Returns:it returns nothing	                            							    */
+/*Desc:This Function setup the CAN Registers	     					                    */
+/********************************************************************************************/
+static void MCAN_voidSetup(void)
+{
+ 8000550:	b580      	push	{r7, lr}
+ 8000552:	af00      	add	r7, sp, #0
+
+	MRCC_voidSetPeripheralclock(APB1,CAN1EN,ON); // Enable the clock for the CAN Peripheral
+ 8000554:	2201      	movs	r2, #1
+ 8000556:	f04f 7100 	mov.w	r1, #33554432	; 0x2000000
+ 800055a:	2001      	movs	r0, #1
+ 800055c:	f000 fab4 	bl	8000ac8 <MRCC_voidSetPeripheralclock>
+	/*********************************************/
+	/* need to make AFIO for the pins p8,9       */
+	/*********************************************/
+	MGPIO_voidSetPinMode(Can_Tx,Output2_AFPushPull);  //Set TX pin to Alternative Function Pushpull
+ 8000560:	220a      	movs	r2, #10
+ 8000562:	2101      	movs	r1, #1
+ 8000564:	200c      	movs	r0, #12
+ 8000566:	f000 f8ef 	bl	8000748 <MGPIO_voidSetPinMode>
+	MGPIO_voidSetPinMode(Can_Rx,Input_Floating);      //Set RX pin to Input Floating
+ 800056a:	2204      	movs	r2, #4
+ 800056c:	2101      	movs	r1, #1
+ 800056e:	200b      	movs	r0, #11
+ 8000570:	f000 f8ea 	bl	8000748 <MGPIO_voidSetPinMode>
+	 * Receive FIFO not locked on overrun
+	 * Out of Sleep mode request
+	 * Time triggered communication mode off
+	 * The Sleep mode is left on software request.
+	 * CAN reception/transmission frozen during debug. */
+   CAN->MCR = (  ( CAN_MCR_NART << CAN_MCR_NART_Bit )  | ( CAN_MCR_ABOM << CAN_MCR_ABOM_Bit )
+ 8000574:	4b02      	ldr	r3, [pc, #8]	; (8000580 <MCAN_voidSetup+0x30>)
+ 8000576:	2210      	movs	r2, #16
+ 8000578:	601a      	str	r2, [r3, #0]
+
+
+   /* Enable the Empty mailbox interrupt & FIFO message pending interrupt enable */
+  // CAN->IER= ( ( CAN_IER_TMEIE << CAN_IER_TMEIE_Bit ) | ( CAN_IER_FMPIE0 << CAN_IER_FMPIE0_Bit ) ) ;
+
+}
+ 800057a:	bf00      	nop
+ 800057c:	bd80      	pop	{r7, pc}
+ 800057e:	bf00      	nop
+ 8000580:	40006400 	.word	0x40006400
+
+08000584 <MCAN_voidMode>:
+/*I/P Parameters: void																		 */
+/*Returns:it returns nothing	                            							     */
+/*Desc:This Function setup the CAN Mode Test Mode or Not     			                     */
+/*********************************************************************************************/
+static void MCAN_voidMode(void)
+{
+ 8000584:	b480      	push	{r7}
+ 8000586:	af00      	add	r7, sp, #0
+			CLR_BIT(CAN->BTR,CAN_BTR_LBKM_BIT); // Loop Back Mode Disable
+			CLR_BIT(CAN->BTR,CAN_BTR_SILM_BIT); // Silent Mode Disable
+		}
+  #elif (Test_Mode==Enable)					// Test mode Is Enabled
+		{
+			CAN->BTR= CAN_BaudRate; 			// BaudRate = 1 Mbps
+ 8000588:	4b09      	ldr	r3, [pc, #36]	; (80005b0 <MCAN_voidMode+0x2c>)
+ 800058a:	f44f 22a0 	mov.w	r2, #327680	; 0x50000
+ 800058e:	61da      	str	r2, [r3, #28]
+			SET_BIT(CAN->BTR,CAN_BTR_LBKM_BIT); // Loop Back Mode Enable
+ 8000590:	4b07      	ldr	r3, [pc, #28]	; (80005b0 <MCAN_voidMode+0x2c>)
+ 8000592:	69db      	ldr	r3, [r3, #28]
+ 8000594:	4a06      	ldr	r2, [pc, #24]	; (80005b0 <MCAN_voidMode+0x2c>)
+ 8000596:	f043 4380 	orr.w	r3, r3, #1073741824	; 0x40000000
+ 800059a:	61d3      	str	r3, [r2, #28]
+			SET_BIT(CAN->BTR,CAN_BTR_SILM_BIT); // Silent Mode Enable
+ 800059c:	4b04      	ldr	r3, [pc, #16]	; (80005b0 <MCAN_voidMode+0x2c>)
+ 800059e:	69db      	ldr	r3, [r3, #28]
+ 80005a0:	4a03      	ldr	r2, [pc, #12]	; (80005b0 <MCAN_voidMode+0x2c>)
+ 80005a2:	f043 4300 	orr.w	r3, r3, #2147483648	; 0x80000000
+ 80005a6:	61d3      	str	r3, [r2, #28]
+		}
+   #endif
+
+}
+ 80005a8:	bf00      	nop
+ 80005aa:	46bd      	mov	sp, r7
+ 80005ac:	bc80      	pop	{r7}
+ 80005ae:	4770      	bx	lr
+ 80005b0:	40006400 	.word	0x40006400
+
+080005b4 <MCAN_voidInitializationMode>:
+/*I/P Parameters: void																		 */
+/*Returns:it returns nothing	                            							     */
+/*Desc:This Function allows CAN to Enter Initialization Mode   			                     */
+/*********************************************************************************************/
+static void MCAN_voidInitializationMode(void)
+{
+ 80005b4:	b480      	push	{r7}
+ 80005b6:	af00      	add	r7, sp, #0
+	   /* Initialization Mode Entry */
+	    SET_BIT(CAN->MCR,CAN_MCR_INRQ_Bit);  // Initialization Mode Request
+ 80005b8:	4b0e      	ldr	r3, [pc, #56]	; (80005f4 <MCAN_voidInitializationMode+0x40>)
+ 80005ba:	681b      	ldr	r3, [r3, #0]
+ 80005bc:	4a0d      	ldr	r2, [pc, #52]	; (80005f4 <MCAN_voidInitializationMode+0x40>)
+ 80005be:	f043 0301 	orr.w	r3, r3, #1
+ 80005c2:	6013      	str	r3, [r2, #0]
+	    CLR_BIT(CAN->MCR,CAN_MCR_SLEEP_BIT); // Leave Sleep Mode Request
+ 80005c4:	4b0b      	ldr	r3, [pc, #44]	; (80005f4 <MCAN_voidInitializationMode+0x40>)
+ 80005c6:	681b      	ldr	r3, [r3, #0]
+ 80005c8:	4a0a      	ldr	r2, [pc, #40]	; (80005f4 <MCAN_voidInitializationMode+0x40>)
+ 80005ca:	f023 0302 	bic.w	r3, r3, #2
+ 80005ce:	6013      	str	r3, [r2, #0]
+
+	    // wait till the INAK is cleared and also the SLAK
+	    while ((GET_BIT(CAN->MSR,CAN_MSR_INAK_Bit)) && (GET_BIT(CAN->MSR,CAN_MSR_SLAK_Bit)));
+ 80005d0:	bf00      	nop
+ 80005d2:	4b08      	ldr	r3, [pc, #32]	; (80005f4 <MCAN_voidInitializationMode+0x40>)
+ 80005d4:	685b      	ldr	r3, [r3, #4]
+ 80005d6:	f003 0301 	and.w	r3, r3, #1
+ 80005da:	2b00      	cmp	r3, #0
+ 80005dc:	d006      	beq.n	80005ec <MCAN_voidInitializationMode+0x38>
+ 80005de:	4b05      	ldr	r3, [pc, #20]	; (80005f4 <MCAN_voidInitializationMode+0x40>)
+ 80005e0:	685b      	ldr	r3, [r3, #4]
+ 80005e2:	085b      	lsrs	r3, r3, #1
+ 80005e4:	f003 0301 	and.w	r3, r3, #1
+ 80005e8:	2b00      	cmp	r3, #0
+ 80005ea:	d1f2      	bne.n	80005d2 <MCAN_voidInitializationMode+0x1e>
+}
+ 80005ec:	bf00      	nop
+ 80005ee:	46bd      	mov	sp, r7
+ 80005f0:	bc80      	pop	{r7}
+ 80005f2:	4770      	bx	lr
+ 80005f4:	40006400 	.word	0x40006400
+
+080005f8 <MCAN_voidStart>:
+/*I/P Parameters: void																		 */
+/*Returns:it returns nothing	                            							     */
+/*Desc:This Function allows CAN to Enter Normal Mode		   			                     */
+/*********************************************************************************************/
+static void MCAN_voidStart(void)
+{
+ 80005f8:	b480      	push	{r7}
+ 80005fa:	af00      	add	r7, sp, #0
+   /* Normal Mode Entry */
+   CLR_BIT(CAN->MCR,CAN_MCR_INRQ_Bit); // Leave Initialization Mode Request
+ 80005fc:	4b0b      	ldr	r3, [pc, #44]	; (800062c <MCAN_voidStart+0x34>)
+ 80005fe:	681b      	ldr	r3, [r3, #0]
+ 8000600:	4a0a      	ldr	r2, [pc, #40]	; (800062c <MCAN_voidStart+0x34>)
+ 8000602:	f023 0301 	bic.w	r3, r3, #1
+ 8000606:	6013      	str	r3, [r2, #0]
+   while ((GET_BIT(CAN->MSR,CAN_MSR_INAK_Bit)) && (GET_BIT(CAN->MSR,CAN_MSR_SLAK_Bit))); //wait ACK for Normal Mode
+ 8000608:	bf00      	nop
+ 800060a:	4b08      	ldr	r3, [pc, #32]	; (800062c <MCAN_voidStart+0x34>)
+ 800060c:	685b      	ldr	r3, [r3, #4]
+ 800060e:	f003 0301 	and.w	r3, r3, #1
+ 8000612:	2b00      	cmp	r3, #0
+ 8000614:	d006      	beq.n	8000624 <MCAN_voidStart+0x2c>
+ 8000616:	4b05      	ldr	r3, [pc, #20]	; (800062c <MCAN_voidStart+0x34>)
+ 8000618:	685b      	ldr	r3, [r3, #4]
+ 800061a:	085b      	lsrs	r3, r3, #1
+ 800061c:	f003 0301 	and.w	r3, r3, #1
+ 8000620:	2b00      	cmp	r3, #0
+ 8000622:	d1f2      	bne.n	800060a <MCAN_voidStart+0x12>
+
+}
+ 8000624:	bf00      	nop
+ 8000626:	46bd      	mov	sp, r7
+ 8000628:	bc80      	pop	{r7}
+ 800062a:	4770      	bx	lr
+ 800062c:	40006400 	.word	0x40006400
+
+08000630 <MCAN_voidFiltersInit>:
+/*I/P Parameters: void															*/
+/*Returns:it returns nothing                       							    */
+/*Desc:This Function Initialize all the CAN Filters         		            */
+/********************************************************************************/
+static void MCAN_voidFiltersInit(void)
+{
+ 8000630:	b598      	push	{r3, r4, r7, lr}
+ 8000632:	af00      	add	r7, sp, #0
+	SET_BIT(CAN->FMR,CAN_FMR_FINIT_BIT);	// SET bit FINIT to initialize the filter
+ 8000634:	4b17      	ldr	r3, [pc, #92]	; (8000694 <MCAN_voidFiltersInit+0x64>)
+ 8000636:	f8d3 3200 	ldr.w	r3, [r3, #512]	; 0x200
+ 800063a:	4a16      	ldr	r2, [pc, #88]	; (8000694 <MCAN_voidFiltersInit+0x64>)
+ 800063c:	f043 0301 	orr.w	r3, r3, #1
+ 8000640:	f8c2 3200 	str.w	r3, [r2, #512]	; 0x200
+	CAN->FA1R=Reset_Value;					// inactive All filters
+ 8000644:	4b13      	ldr	r3, [pc, #76]	; (8000694 <MCAN_voidFiltersInit+0x64>)
+ 8000646:	2200      	movs	r2, #0
+ 8000648:	f8c3 221c 	str.w	r2, [r3, #540]	; 0x21c
+	CAN->FM1R=MCAN_u32FiltersMode();         // Set the Filters Mode
+ 800064c:	4c11      	ldr	r4, [pc, #68]	; (8000694 <MCAN_voidFiltersInit+0x64>)
+ 800064e:	f000 f830 	bl	80006b2 <MCAN_u32FiltersMode>
+ 8000652:	4603      	mov	r3, r0
+ 8000654:	f8c4 3204 	str.w	r3, [r4, #516]	; 0x204
+	CAN->FS1R=MCAN_u32FiltersScale();        // Set the Filters Scale
+ 8000658:	4c0e      	ldr	r4, [pc, #56]	; (8000694 <MCAN_voidFiltersInit+0x64>)
+ 800065a:	f000 f838 	bl	80006ce <MCAN_u32FiltersScale>
+ 800065e:	4603      	mov	r3, r0
+ 8000660:	f8c4 320c 	str.w	r3, [r4, #524]	; 0x20c
+	CAN->FFA1R=MCAN_u32FiltersAssign();      // Set the assign of each filter to One of the FIFOs (0 or 1)
+ 8000664:	4c0b      	ldr	r4, [pc, #44]	; (8000694 <MCAN_voidFiltersInit+0x64>)
+ 8000666:	f000 f840 	bl	80006ea <MCAN_u32FiltersAssign>
+ 800066a:	4603      	mov	r3, r0
+ 800066c:	f8c4 3214 	str.w	r3, [r4, #532]	; 0x214
+	MCAN_voidSetIDs();                       // Set the IDs to the Filters
+ 8000670:	f000 f848 	bl	8000704 <MCAN_voidSetIDs>
+	CAN->FA1R=MCAN_u32FiltersEnable();       // Enable The Filters
+ 8000674:	4c07      	ldr	r4, [pc, #28]	; (8000694 <MCAN_voidFiltersInit+0x64>)
+ 8000676:	f000 f80f 	bl	8000698 <MCAN_u32FiltersEnable>
+ 800067a:	4603      	mov	r3, r0
+ 800067c:	f8c4 321c 	str.w	r3, [r4, #540]	; 0x21c
+	CLR_BIT(CAN->FMR,CAN_FMR_FINIT_BIT);	// CLEAR bit FINIT to Activate the filter
+ 8000680:	4b04      	ldr	r3, [pc, #16]	; (8000694 <MCAN_voidFiltersInit+0x64>)
+ 8000682:	f8d3 3200 	ldr.w	r3, [r3, #512]	; 0x200
+ 8000686:	4a03      	ldr	r2, [pc, #12]	; (8000694 <MCAN_voidFiltersInit+0x64>)
+ 8000688:	f023 0301 	bic.w	r3, r3, #1
+ 800068c:	f8c2 3200 	str.w	r3, [r2, #512]	; 0x200
+}
+ 8000690:	bf00      	nop
+ 8000692:	bd98      	pop	{r3, r4, r7, pc}
+ 8000694:	40006400 	.word	0x40006400
+
+08000698 <MCAN_u32FiltersEnable>:
+/*I/P Parameters: void															*/
+/*Returns:it returns u32 Variable                  							    */
+/*Desc:This Function returns the value to the Enabled Filters  		            */
+/********************************************************************************/
+static u32 MCAN_u32FiltersEnable(void)
+{
+ 8000698:	b480      	push	{r7}
+ 800069a:	b083      	sub	sp, #12
+ 800069c:	af00      	add	r7, sp, #0
+	u32 Local_u32Value=0;   //Local Variable For Data Read
+ 800069e:	2300      	movs	r3, #0
+ 80006a0:	607b      	str	r3, [r7, #4]
+	/*Assemble Filters Values*/
+	/*All Filters are disabled now*/
+	Local_u32Value =((Filter27_Enable<<Filter27)| (Filter26_Enable<<Filter26)| (Filter25_Enable<<Filter25)|
+ 80006a2:	2301      	movs	r3, #1
+ 80006a4:	607b      	str	r3, [r7, #4]
+					 (Filter13_Enable<<Filter13)| (Filter12_Enable<<Filter12)| (Filter11_Enable<<Filter11)|
+					 (Filter10_Enable<<Filter10)| (Filter9_Enable<<Filter9  )| (Filter8_Enable<<Filter8  )|
+					 (Filter7_Enable<<Filter7  )| (Filter6_Enable<<Filter6  )| (Filter5_Enable<<Filter5  )|
+					 (Filter4_Enable<<Filter4  )| (Filter3_Enable<<Filter3  )| (Filter2_Enable<<Filter2  )|
+					 (Filter1_Enable<<Filter1  )| (Filter0_Enable<<Filter0  ));
+	return Local_u32Value;  // Returning the control to the caller function
+ 80006a6:	687b      	ldr	r3, [r7, #4]
+}
+ 80006a8:	4618      	mov	r0, r3
+ 80006aa:	370c      	adds	r7, #12
+ 80006ac:	46bd      	mov	sp, r7
+ 80006ae:	bc80      	pop	{r7}
+ 80006b0:	4770      	bx	lr
+
+080006b2 <MCAN_u32FiltersMode>:
+/*I/P Parameters: void															*/
+/*Returns:it returns u32 Variable                  							    */
+/*Desc:This Function returns the value to Filters modes list or mask            */
+/********************************************************************************/
+static u32 MCAN_u32FiltersMode(void)
+{
+ 80006b2:	b480      	push	{r7}
+ 80006b4:	b083      	sub	sp, #12
+ 80006b6:	af00      	add	r7, sp, #0
+	u32 Local_u32Value=0;  //Local Variable For Data Read
+ 80006b8:	2300      	movs	r3, #0
+ 80006ba:	607b      	str	r3, [r7, #4]
+	/*Assemble Filters Values*/
+	/*Two 32-bit registers of filter bank x are in Identifier List mode. when x is 0-->27 */
+	Local_u32Value =((Filter27_Mode<<Filter27)| (Filter26_Mode<<Filter26)| (Filter25_Mode<<Filter25)|
+ 80006bc:	f06f 4370 	mvn.w	r3, #4026531840	; 0xf0000000
+ 80006c0:	607b      	str	r3, [r7, #4]
+					 (Filter13_Mode<<Filter13)| (Filter12_Mode<<Filter12)| (Filter11_Mode<<Filter11)|
+					 (Filter10_Mode<<Filter10)| (Filter9_Mode<<Filter9  )| (Filter8_Mode<<Filter8  )|
+					 (Filter7_Mode<<Filter7  )| (Filter6_Mode<<Filter6  )| (Filter5_Mode<<Filter5  )|
+					 (Filter4_Mode<<Filter4  )| (Filter3_Mode<<Filter3  )| (Filter2_Mode<<Filter2  )|
+					 (Filter1_Mode<<Filter1  )| (Filter0_Mode<<Filter0  ));
+	return Local_u32Value;  // Returning the control to the caller function
+ 80006c2:	687b      	ldr	r3, [r7, #4]
+}
+ 80006c4:	4618      	mov	r0, r3
+ 80006c6:	370c      	adds	r7, #12
+ 80006c8:	46bd      	mov	sp, r7
+ 80006ca:	bc80      	pop	{r7}
+ 80006cc:	4770      	bx	lr
+
+080006ce <MCAN_u32FiltersScale>:
+/*I/P Parameters: void															    */
+/*Returns:it returns u32 Variable                  							        */
+/*Desc:This Function returns the value to Filters Scale Dual 16-bit or single 32-bit*/
+/************************************************************************************/
+static u32 MCAN_u32FiltersScale(void)
+{
+ 80006ce:	b480      	push	{r7}
+ 80006d0:	b083      	sub	sp, #12
+ 80006d2:	af00      	add	r7, sp, #0
+	u32 Local_u32Value=0;   //Local Variable For Data Read
+ 80006d4:	2300      	movs	r3, #0
+ 80006d6:	607b      	str	r3, [r7, #4]
+	/*Assemble Filters Values*/
+	/*Two 32-bit registers of filter bank x are in Identifier List mode. when x is 0-->27 */
+	Local_u32Value =((Filter27_Scale<<Filter27)| (Filter26_Scale<<Filter26)| (Filter25_Scale<<Filter25)|
+ 80006d8:	f06f 4370 	mvn.w	r3, #4026531840	; 0xf0000000
+ 80006dc:	607b      	str	r3, [r7, #4]
+					 (Filter13_Scale<<Filter13)| (Filter12_Scale<<Filter12)| (Filter11_Scale<<Filter11)|
+					 (Filter10_Scale<<Filter10)| (Filter9_Scale<<Filter9  )| (Filter8_Scale<<Filter8  )|
+					 (Filter7_Scale<<Filter7  )| (Filter6_Scale<<Filter6  )| (Filter5_Scale<<Filter5  )|
+					 (Filter4_Scale<<Filter4  )| (Filter3_Scale<<Filter3  )| (Filter2_Scale<<Filter2  )|
+					 (Filter1_Scale<<Filter1  )| (Filter0_Scale<<Filter0  ));
+	return Local_u32Value;  // Returning the control to the caller function
+ 80006de:	687b      	ldr	r3, [r7, #4]
+}
+ 80006e0:	4618      	mov	r0, r3
+ 80006e2:	370c      	adds	r7, #12
+ 80006e4:	46bd      	mov	sp, r7
+ 80006e6:	bc80      	pop	{r7}
+ 80006e8:	4770      	bx	lr
+
+080006ea <MCAN_u32FiltersAssign>:
+/*I/P Parameters: void															*/
+/*Returns:it returns u32 Variable                  							    */
+/*Desc:This Function returns the value to Filters assigned to FIFO 0 or 1       */
+/********************************************************************************/
+static u32 MCAN_u32FiltersAssign(void)
+{
+ 80006ea:	b480      	push	{r7}
+ 80006ec:	b083      	sub	sp, #12
+ 80006ee:	af00      	add	r7, sp, #0
+	u32 Local_u32Value=0;   //Local Variable For Data Read
+ 80006f0:	2300      	movs	r3, #0
+ 80006f2:	607b      	str	r3, [r7, #4]
+	/*Assemble Filters Values*/
+	/*Set the assignments of filter x to FIFO(0) when x is 0-->27*/
+	Local_u32Value =((Filter27_Assign<<Filter27)| (Filter26_Assign<<Filter26)| (Filter25_Assign<<Filter25)|
+ 80006f4:	2302      	movs	r3, #2
+ 80006f6:	607b      	str	r3, [r7, #4]
+					 (Filter13_Assign<<Filter13)| (Filter12_Assign<<Filter12)| (Filter11_Assign<<Filter11)|
+					 (Filter10_Assign<<Filter10)| (Filter9_Assign<<Filter9  )| (Filter8_Assign<<Filter8  )|
+					 (Filter7_Assign<<Filter7  )| (Filter6_Assign<<Filter6  )| (Filter5_Assign<<Filter5  )|
+					 (Filter4_Assign<<Filter4  )| (Filter3_Assign<<Filter3  )| (Filter2_Assign<<Filter2  )|
+					 (Filter1_Assign<<Filter1  )| (Filter0_Assign<<Filter0  ));
+	return Local_u32Value;  // Returning the control to the caller function
+ 80006f8:	687b      	ldr	r3, [r7, #4]
+}
+ 80006fa:	4618      	mov	r0, r3
+ 80006fc:	370c      	adds	r7, #12
+ 80006fe:	46bd      	mov	sp, r7
+ 8000700:	bc80      	pop	{r7}
+ 8000702:	4770      	bx	lr
+
+08000704 <MCAN_voidSetIDs>:
+/*I/P Parameters: void															*/
+/*Returns:it returns nothing                       							    */
+/*Desc:This Function set the IDs For Each Filter in the CAN  		            */
+/********************************************************************************/
+static void MCAN_voidSetIDs(void)
+{
+ 8000704:	b480      	push	{r7}
+ 8000706:	af00      	add	r7, sp, #0
+   #if (Filter0_Enable==Enable)
+   {
+	 CAN->Filter[Filter0].FR1=Filter0_ID1;  // Assign ID 1 For Filter 0
+ 8000708:	4b06      	ldr	r3, [pc, #24]	; (8000724 <MCAN_voidSetIDs+0x20>)
+ 800070a:	f04f 62dc 	mov.w	r2, #115343360	; 0x6e00000
+ 800070e:	f8c3 2240 	str.w	r2, [r3, #576]	; 0x240
+	 CAN->Filter[Filter0].FR2=Filter0_ID2;  // Assign ID 2 For Filter 0
+ 8000712:	4b04      	ldr	r3, [pc, #16]	; (8000724 <MCAN_voidSetIDs+0x20>)
+ 8000714:	f04f 62dc 	mov.w	r2, #115343360	; 0x6e00000
+ 8000718:	f8c3 2244 	str.w	r2, [r3, #580]	; 0x244
+   {
+	 CAN->Filter[Filter27].FR1=Filter27_ID1;  // Assign ID 1 For Filter 27
+	 CAN->Filter[Filter27].FR2=Filter27_ID2;  // Assign ID 2 For Filter 27
+   }
+   #endif
+}
+ 800071c:	bf00      	nop
+ 800071e:	46bd      	mov	sp, r7
+ 8000720:	bc80      	pop	{r7}
+ 8000722:	4770      	bx	lr
+ 8000724:	40006400 	.word	0x40006400
+
+08000728 <MGPIO_voidIntialization>:
+/*Desc:This Function initialize the GPIO using the RCC Enable		          */
+/******************************************************************************/
+/*Input IOPA , IOPB , IOPC													  */
+/******************************************************************************/
+void MGPIO_voidIntialization (u8 Copy_u8GPIONumber)
+{
+ 8000728:	b580      	push	{r7, lr}
+ 800072a:	b082      	sub	sp, #8
+ 800072c:	af00      	add	r7, sp, #0
+ 800072e:	4603      	mov	r3, r0
+ 8000730:	71fb      	strb	r3, [r7, #7]
+	MRCC_voidSetPeripheralclock(APB2,Copy_u8GPIONumber,ON); // Enable the CLk for the I/P and get the Error Status
+ 8000732:	79fb      	ldrb	r3, [r7, #7]
+ 8000734:	2201      	movs	r2, #1
+ 8000736:	4619      	mov	r1, r3
+ 8000738:	2002      	movs	r0, #2
+ 800073a:	f000 f9c5 	bl	8000ac8 <MRCC_voidSetPeripheralclock>
+}
+ 800073e:	bf00      	nop
+ 8000740:	3708      	adds	r7, #8
+ 8000742:	46bd      	mov	sp, r7
+ 8000744:	bd80      	pop	{r7, pc}
+	...
+
+08000748 <MGPIO_voidSetPinMode>:
+/*           Output10_PushPull, Output10_OpenDrain, Output10_AFPushPull, Output10_AFOpenDrain */
+/*           Output2_PushPull,  Output2_OpenDrain,  Output2_AFPushPull,  Output2_AFOpenDrain  */
+/*           Output50_PushPull, Output50_OpenDrain, Output50_AFPushPull, Output50_AFOpenDrain */
+/**********************************************************************************************/
+void MGPIO_voidSetPinMode (u8 Copy_u8PinNumber, u8 Copy_u8PortNumber ,u8 Copy_u8Direction)
+{
+ 8000748:	b480      	push	{r7}
+ 800074a:	b083      	sub	sp, #12
+ 800074c:	af00      	add	r7, sp, #0
+ 800074e:	4603      	mov	r3, r0
+ 8000750:	71fb      	strb	r3, [r7, #7]
+ 8000752:	460b      	mov	r3, r1
+ 8000754:	71bb      	strb	r3, [r7, #6]
+ 8000756:	4613      	mov	r3, r2
+ 8000758:	717b      	strb	r3, [r7, #5]
+	/**************************************************************************************/
+	/**************************************************************************************/
+	/*									Inputs Validation								  */
+	/**************************************************************************************/
+
+	if ( (Copy_u8PortNumber==GPIO_PORTC && (Copy_u8PinNumber < 13 || Copy_u8PinNumber > 15) ) ||
+ 800075a:	79bb      	ldrb	r3, [r7, #6]
+ 800075c:	2b03      	cmp	r3, #3
+ 800075e:	d107      	bne.n	8000770 <MGPIO_voidSetPinMode+0x28>
+ 8000760:	79fb      	ldrb	r3, [r7, #7]
+ 8000762:	2b0c      	cmp	r3, #12
+ 8000764:	f240 80c3 	bls.w	80008ee <MGPIO_voidSetPinMode+0x1a6>
+ 8000768:	79fb      	ldrb	r3, [r7, #7]
+ 800076a:	2b0f      	cmp	r3, #15
+ 800076c:	f200 80bf 	bhi.w	80008ee <MGPIO_voidSetPinMode+0x1a6>
+ 8000770:	79bb      	ldrb	r3, [r7, #6]
+ 8000772:	2b02      	cmp	r3, #2
+ 8000774:	d103      	bne.n	800077e <MGPIO_voidSetPinMode+0x36>
+				 (Copy_u8PortNumber==GPIO_PORTB && (Copy_u8PinNumber == 2) ) ||
+ 8000776:	79fb      	ldrb	r3, [r7, #7]
+ 8000778:	2b02      	cmp	r3, #2
+ 800077a:	f000 80bb 	beq.w	80008f4 <MGPIO_voidSetPinMode+0x1ac>
+ 800077e:	79bb      	ldrb	r3, [r7, #6]
+ 8000780:	2b01      	cmp	r3, #1
+ 8000782:	d107      	bne.n	8000794 <MGPIO_voidSetPinMode+0x4c>
+				 (Copy_u8PortNumber==GPIO_PORTA && (Copy_u8PinNumber == 13 ||Copy_u8PinNumber == 14) ))
+ 8000784:	79fb      	ldrb	r3, [r7, #7]
+ 8000786:	2b0d      	cmp	r3, #13
+ 8000788:	f000 80b1 	beq.w	80008ee <MGPIO_voidSetPinMode+0x1a6>
+ 800078c:	79fb      	ldrb	r3, [r7, #7]
+ 800078e:	2b0e      	cmp	r3, #14
+ 8000790:	f000 80ad 	beq.w	80008ee <MGPIO_voidSetPinMode+0x1a6>
+	else
+	{
+	/**************************************************************************************/
+	/**************************************************************************************/
+		/* Switching on the GPIO Ports */
+		switch (Copy_u8PortNumber) {
+ 8000794:	79bb      	ldrb	r3, [r7, #6]
+ 8000796:	2b03      	cmp	r3, #3
+ 8000798:	d073      	beq.n	8000882 <MGPIO_voidSetPinMode+0x13a>
+ 800079a:	2b03      	cmp	r3, #3
+ 800079c:	f300 80a9 	bgt.w	80008f2 <MGPIO_voidSetPinMode+0x1aa>
+ 80007a0:	2b01      	cmp	r3, #1
+ 80007a2:	d002      	beq.n	80007aa <MGPIO_voidSetPinMode+0x62>
+ 80007a4:	2b02      	cmp	r3, #2
+ 80007a6:	d036      	beq.n	8000816 <MGPIO_voidSetPinMode+0xce>
+					/* Set the mode and direction of the required pin */
+					GPIOC->GPIO_CRH |=  ( Copy_u8Direction << (Copy_u8PinNumber * 4) );
+				}
+				break;
+			default:
+				break;
+ 80007a8:	e0a3      	b.n	80008f2 <MGPIO_voidSetPinMode+0x1aa>
+				if (Copy_u8PinNumber < 8)
+ 80007aa:	79fb      	ldrb	r3, [r7, #7]
+ 80007ac:	2b07      	cmp	r3, #7
+ 80007ae:	d817      	bhi.n	80007e0 <MGPIO_voidSetPinMode+0x98>
+					GPIOA->GPIO_CRL &=~ ( GPIO_ResetMask << (Copy_u8PinNumber * 4) );
+ 80007b0:	4b53      	ldr	r3, [pc, #332]	; (8000900 <MGPIO_voidSetPinMode+0x1b8>)
+ 80007b2:	681b      	ldr	r3, [r3, #0]
+ 80007b4:	79fa      	ldrb	r2, [r7, #7]
+ 80007b6:	0092      	lsls	r2, r2, #2
+ 80007b8:	210f      	movs	r1, #15
+ 80007ba:	fa01 f202 	lsl.w	r2, r1, r2
+ 80007be:	43d2      	mvns	r2, r2
+ 80007c0:	4611      	mov	r1, r2
+ 80007c2:	4a4f      	ldr	r2, [pc, #316]	; (8000900 <MGPIO_voidSetPinMode+0x1b8>)
+ 80007c4:	400b      	ands	r3, r1
+ 80007c6:	6013      	str	r3, [r2, #0]
+					GPIOA->GPIO_CRL |=  ( Copy_u8Direction << (Copy_u8PinNumber * 4) );
+ 80007c8:	4b4d      	ldr	r3, [pc, #308]	; (8000900 <MGPIO_voidSetPinMode+0x1b8>)
+ 80007ca:	681b      	ldr	r3, [r3, #0]
+ 80007cc:	7979      	ldrb	r1, [r7, #5]
+ 80007ce:	79fa      	ldrb	r2, [r7, #7]
+ 80007d0:	0092      	lsls	r2, r2, #2
+ 80007d2:	fa01 f202 	lsl.w	r2, r1, r2
+ 80007d6:	4611      	mov	r1, r2
+ 80007d8:	4a49      	ldr	r2, [pc, #292]	; (8000900 <MGPIO_voidSetPinMode+0x1b8>)
+ 80007da:	430b      	orrs	r3, r1
+ 80007dc:	6013      	str	r3, [r2, #0]
+				break;
+ 80007de:	e089      	b.n	80008f4 <MGPIO_voidSetPinMode+0x1ac>
+					Copy_u8PinNumber -= 8;
+ 80007e0:	79fb      	ldrb	r3, [r7, #7]
+ 80007e2:	3b08      	subs	r3, #8
+ 80007e4:	71fb      	strb	r3, [r7, #7]
+					GPIOA->GPIO_CRH &=~ ( GPIO_ResetMask << (Copy_u8PinNumber * 4) );
+ 80007e6:	4b46      	ldr	r3, [pc, #280]	; (8000900 <MGPIO_voidSetPinMode+0x1b8>)
+ 80007e8:	685b      	ldr	r3, [r3, #4]
+ 80007ea:	79fa      	ldrb	r2, [r7, #7]
+ 80007ec:	0092      	lsls	r2, r2, #2
+ 80007ee:	210f      	movs	r1, #15
+ 80007f0:	fa01 f202 	lsl.w	r2, r1, r2
+ 80007f4:	43d2      	mvns	r2, r2
+ 80007f6:	4611      	mov	r1, r2
+ 80007f8:	4a41      	ldr	r2, [pc, #260]	; (8000900 <MGPIO_voidSetPinMode+0x1b8>)
+ 80007fa:	400b      	ands	r3, r1
+ 80007fc:	6053      	str	r3, [r2, #4]
+					GPIOA->GPIO_CRH |=  ( Copy_u8Direction << (Copy_u8PinNumber * 4) );
+ 80007fe:	4b40      	ldr	r3, [pc, #256]	; (8000900 <MGPIO_voidSetPinMode+0x1b8>)
+ 8000800:	685b      	ldr	r3, [r3, #4]
+ 8000802:	7979      	ldrb	r1, [r7, #5]
+ 8000804:	79fa      	ldrb	r2, [r7, #7]
+ 8000806:	0092      	lsls	r2, r2, #2
+ 8000808:	fa01 f202 	lsl.w	r2, r1, r2
+ 800080c:	4611      	mov	r1, r2
+ 800080e:	4a3c      	ldr	r2, [pc, #240]	; (8000900 <MGPIO_voidSetPinMode+0x1b8>)
+ 8000810:	430b      	orrs	r3, r1
+ 8000812:	6053      	str	r3, [r2, #4]
+				break;
+ 8000814:	e06e      	b.n	80008f4 <MGPIO_voidSetPinMode+0x1ac>
+				if (Copy_u8PinNumber < 8)
+ 8000816:	79fb      	ldrb	r3, [r7, #7]
+ 8000818:	2b07      	cmp	r3, #7
+ 800081a:	d817      	bhi.n	800084c <MGPIO_voidSetPinMode+0x104>
+					GPIOB->GPIO_CRL &=~ ( GPIO_ResetMask << (Copy_u8PinNumber * 4) );
+ 800081c:	4b39      	ldr	r3, [pc, #228]	; (8000904 <MGPIO_voidSetPinMode+0x1bc>)
+ 800081e:	681b      	ldr	r3, [r3, #0]
+ 8000820:	79fa      	ldrb	r2, [r7, #7]
+ 8000822:	0092      	lsls	r2, r2, #2
+ 8000824:	210f      	movs	r1, #15
+ 8000826:	fa01 f202 	lsl.w	r2, r1, r2
+ 800082a:	43d2      	mvns	r2, r2
+ 800082c:	4611      	mov	r1, r2
+ 800082e:	4a35      	ldr	r2, [pc, #212]	; (8000904 <MGPIO_voidSetPinMode+0x1bc>)
+ 8000830:	400b      	ands	r3, r1
+ 8000832:	6013      	str	r3, [r2, #0]
+					GPIOB->GPIO_CRL |=  ( Copy_u8Direction << (Copy_u8PinNumber * 4) );
+ 8000834:	4b33      	ldr	r3, [pc, #204]	; (8000904 <MGPIO_voidSetPinMode+0x1bc>)
+ 8000836:	681b      	ldr	r3, [r3, #0]
+ 8000838:	7979      	ldrb	r1, [r7, #5]
+ 800083a:	79fa      	ldrb	r2, [r7, #7]
+ 800083c:	0092      	lsls	r2, r2, #2
+ 800083e:	fa01 f202 	lsl.w	r2, r1, r2
+ 8000842:	4611      	mov	r1, r2
+ 8000844:	4a2f      	ldr	r2, [pc, #188]	; (8000904 <MGPIO_voidSetPinMode+0x1bc>)
+ 8000846:	430b      	orrs	r3, r1
+ 8000848:	6013      	str	r3, [r2, #0]
+				break;
+ 800084a:	e053      	b.n	80008f4 <MGPIO_voidSetPinMode+0x1ac>
+					Copy_u8PinNumber -= 8;
+ 800084c:	79fb      	ldrb	r3, [r7, #7]
+ 800084e:	3b08      	subs	r3, #8
+ 8000850:	71fb      	strb	r3, [r7, #7]
+					GPIOB->GPIO_CRH &=~ ( GPIO_ResetMask << (Copy_u8PinNumber * 4) );
+ 8000852:	4b2c      	ldr	r3, [pc, #176]	; (8000904 <MGPIO_voidSetPinMode+0x1bc>)
+ 8000854:	685b      	ldr	r3, [r3, #4]
+ 8000856:	79fa      	ldrb	r2, [r7, #7]
+ 8000858:	0092      	lsls	r2, r2, #2
+ 800085a:	210f      	movs	r1, #15
+ 800085c:	fa01 f202 	lsl.w	r2, r1, r2
+ 8000860:	43d2      	mvns	r2, r2
+ 8000862:	4611      	mov	r1, r2
+ 8000864:	4a27      	ldr	r2, [pc, #156]	; (8000904 <MGPIO_voidSetPinMode+0x1bc>)
+ 8000866:	400b      	ands	r3, r1
+ 8000868:	6053      	str	r3, [r2, #4]
+					GPIOB->GPIO_CRH |=  ( Copy_u8Direction << (Copy_u8PinNumber * 4) );
+ 800086a:	4b26      	ldr	r3, [pc, #152]	; (8000904 <MGPIO_voidSetPinMode+0x1bc>)
+ 800086c:	685b      	ldr	r3, [r3, #4]
+ 800086e:	7979      	ldrb	r1, [r7, #5]
+ 8000870:	79fa      	ldrb	r2, [r7, #7]
+ 8000872:	0092      	lsls	r2, r2, #2
+ 8000874:	fa01 f202 	lsl.w	r2, r1, r2
+ 8000878:	4611      	mov	r1, r2
+ 800087a:	4a22      	ldr	r2, [pc, #136]	; (8000904 <MGPIO_voidSetPinMode+0x1bc>)
+ 800087c:	430b      	orrs	r3, r1
+ 800087e:	6053      	str	r3, [r2, #4]
+				break;
+ 8000880:	e038      	b.n	80008f4 <MGPIO_voidSetPinMode+0x1ac>
+				if (Copy_u8PinNumber < 8)
+ 8000882:	79fb      	ldrb	r3, [r7, #7]
+ 8000884:	2b07      	cmp	r3, #7
+ 8000886:	d817      	bhi.n	80008b8 <MGPIO_voidSetPinMode+0x170>
+					GPIOC->GPIO_CRL &=~ ( GPIO_ResetMask << (Copy_u8PinNumber * 4) );
+ 8000888:	4b1f      	ldr	r3, [pc, #124]	; (8000908 <MGPIO_voidSetPinMode+0x1c0>)
+ 800088a:	681b      	ldr	r3, [r3, #0]
+ 800088c:	79fa      	ldrb	r2, [r7, #7]
+ 800088e:	0092      	lsls	r2, r2, #2
+ 8000890:	210f      	movs	r1, #15
+ 8000892:	fa01 f202 	lsl.w	r2, r1, r2
+ 8000896:	43d2      	mvns	r2, r2
+ 8000898:	4611      	mov	r1, r2
+ 800089a:	4a1b      	ldr	r2, [pc, #108]	; (8000908 <MGPIO_voidSetPinMode+0x1c0>)
+ 800089c:	400b      	ands	r3, r1
+ 800089e:	6013      	str	r3, [r2, #0]
+					GPIOC->GPIO_CRL |=  ( Copy_u8Direction << (Copy_u8PinNumber * 4) );
+ 80008a0:	4b19      	ldr	r3, [pc, #100]	; (8000908 <MGPIO_voidSetPinMode+0x1c0>)
+ 80008a2:	681b      	ldr	r3, [r3, #0]
+ 80008a4:	7979      	ldrb	r1, [r7, #5]
+ 80008a6:	79fa      	ldrb	r2, [r7, #7]
+ 80008a8:	0092      	lsls	r2, r2, #2
+ 80008aa:	fa01 f202 	lsl.w	r2, r1, r2
+ 80008ae:	4611      	mov	r1, r2
+ 80008b0:	4a15      	ldr	r2, [pc, #84]	; (8000908 <MGPIO_voidSetPinMode+0x1c0>)
+ 80008b2:	430b      	orrs	r3, r1
+ 80008b4:	6013      	str	r3, [r2, #0]
+				break;
+ 80008b6:	e01d      	b.n	80008f4 <MGPIO_voidSetPinMode+0x1ac>
+					Copy_u8PinNumber -= 8;
+ 80008b8:	79fb      	ldrb	r3, [r7, #7]
+ 80008ba:	3b08      	subs	r3, #8
+ 80008bc:	71fb      	strb	r3, [r7, #7]
+					GPIOC->GPIO_CRH &=~ ( GPIO_ResetMask << (Copy_u8PinNumber * 4) );
+ 80008be:	4b12      	ldr	r3, [pc, #72]	; (8000908 <MGPIO_voidSetPinMode+0x1c0>)
+ 80008c0:	685b      	ldr	r3, [r3, #4]
+ 80008c2:	79fa      	ldrb	r2, [r7, #7]
+ 80008c4:	0092      	lsls	r2, r2, #2
+ 80008c6:	210f      	movs	r1, #15
+ 80008c8:	fa01 f202 	lsl.w	r2, r1, r2
+ 80008cc:	43d2      	mvns	r2, r2
+ 80008ce:	4611      	mov	r1, r2
+ 80008d0:	4a0d      	ldr	r2, [pc, #52]	; (8000908 <MGPIO_voidSetPinMode+0x1c0>)
+ 80008d2:	400b      	ands	r3, r1
+ 80008d4:	6053      	str	r3, [r2, #4]
+					GPIOC->GPIO_CRH |=  ( Copy_u8Direction << (Copy_u8PinNumber * 4) );
+ 80008d6:	4b0c      	ldr	r3, [pc, #48]	; (8000908 <MGPIO_voidSetPinMode+0x1c0>)
+ 80008d8:	685b      	ldr	r3, [r3, #4]
+ 80008da:	7979      	ldrb	r1, [r7, #5]
+ 80008dc:	79fa      	ldrb	r2, [r7, #7]
+ 80008de:	0092      	lsls	r2, r2, #2
+ 80008e0:	fa01 f202 	lsl.w	r2, r1, r2
+ 80008e4:	4611      	mov	r1, r2
+ 80008e6:	4a08      	ldr	r2, [pc, #32]	; (8000908 <MGPIO_voidSetPinMode+0x1c0>)
+ 80008e8:	430b      	orrs	r3, r1
+ 80008ea:	6053      	str	r3, [r2, #4]
+				break;
+ 80008ec:	e002      	b.n	80008f4 <MGPIO_voidSetPinMode+0x1ac>
+	if ( (Copy_u8PortNumber==GPIO_PORTC && (Copy_u8PinNumber < 13 || Copy_u8PinNumber > 15) ) ||
+ 80008ee:	bf00      	nop
+ 80008f0:	e000      	b.n	80008f4 <MGPIO_voidSetPinMode+0x1ac>
+				break;
+ 80008f2:	bf00      	nop
+		 }
+	}
+	/**************************************************************************************/
+	/**************************************************************************************/
+	/*Returning the control to the caller function*/
+}
+ 80008f4:	bf00      	nop
+ 80008f6:	370c      	adds	r7, #12
+ 80008f8:	46bd      	mov	sp, r7
+ 80008fa:	bc80      	pop	{r7}
+ 80008fc:	4770      	bx	lr
+ 80008fe:	bf00      	nop
+ 8000900:	40010800 	.word	0x40010800
+ 8000904:	40010c00 	.word	0x40010c00
+ 8000908:	40011000 	.word	0x40011000
+
+0800090c <MGPIO_voidSetPinValue>:
+/**********************************************************************************************/
+/*Input  Pins from PIN0 to PIN15					             						      */
+/*		 Port Number GPIO_PORTA, GPIO_PORTB, GPIO_PORTAC      							      */
+/*       Value High or Low																	  */
+void MGPIO_voidSetPinValue (u8 Copy_PinNumber, u8 Copy_u8PortNumber, u8 Copy_u8Value)
+{
+ 800090c:	b480      	push	{r7}
+ 800090e:	b083      	sub	sp, #12
+ 8000910:	af00      	add	r7, sp, #0
+ 8000912:	4603      	mov	r3, r0
+ 8000914:	71fb      	strb	r3, [r7, #7]
+ 8000916:	460b      	mov	r3, r1
+ 8000918:	71bb      	strb	r3, [r7, #6]
+ 800091a:	4613      	mov	r3, r2
+ 800091c:	717b      	strb	r3, [r7, #5]
+	/**************************************************************************************/
+	/**************************************************************************************/
+	/*									Inputs Validation								  */
+	if ( (Copy_PinNumber > 15) )
+ 800091e:	79fb      	ldrb	r3, [r7, #7]
+ 8000920:	2b0f      	cmp	r3, #15
+ 8000922:	d867      	bhi.n	80009f4 <MGPIO_voidSetPinValue+0xe8>
+	/**************************************************************************************/
+	/**************************************************************************************/
+	else
+	{
+		/* Switching on the port number */
+		switch (Copy_u8PortNumber)
+ 8000924:	79bb      	ldrb	r3, [r7, #6]
+ 8000926:	2b03      	cmp	r3, #3
+ 8000928:	d040      	beq.n	80009ac <MGPIO_voidSetPinValue+0xa0>
+ 800092a:	2b03      	cmp	r3, #3
+ 800092c:	dc5b      	bgt.n	80009e6 <MGPIO_voidSetPinValue+0xda>
+ 800092e:	2b01      	cmp	r3, #1
+ 8000930:	d002      	beq.n	8000938 <MGPIO_voidSetPinValue+0x2c>
+ 8000932:	2b02      	cmp	r3, #2
+ 8000934:	d01d      	beq.n	8000972 <MGPIO_voidSetPinValue+0x66>
+				else
+				{
+				}
+				break;
+			default:
+				break;
+ 8000936:	e056      	b.n	80009e6 <MGPIO_voidSetPinValue+0xda>
+				if (Copy_u8Value==High)
+ 8000938:	797b      	ldrb	r3, [r7, #5]
+ 800093a:	2b01      	cmp	r3, #1
+ 800093c:	d10a      	bne.n	8000954 <MGPIO_voidSetPinValue+0x48>
+					GPIOA ->GPIO_ODR |= (1 << Copy_PinNumber);    //Setting the ODR Value
+ 800093e:	4b30      	ldr	r3, [pc, #192]	; (8000a00 <MGPIO_voidSetPinValue+0xf4>)
+ 8000940:	68db      	ldr	r3, [r3, #12]
+ 8000942:	79fa      	ldrb	r2, [r7, #7]
+ 8000944:	2101      	movs	r1, #1
+ 8000946:	fa01 f202 	lsl.w	r2, r1, r2
+ 800094a:	4611      	mov	r1, r2
+ 800094c:	4a2c      	ldr	r2, [pc, #176]	; (8000a00 <MGPIO_voidSetPinValue+0xf4>)
+ 800094e:	430b      	orrs	r3, r1
+ 8000950:	60d3      	str	r3, [r2, #12]
+				break;
+ 8000952:	e04a      	b.n	80009ea <MGPIO_voidSetPinValue+0xde>
+				else if (Copy_u8Value==Low)
+ 8000954:	797b      	ldrb	r3, [r7, #5]
+ 8000956:	2b00      	cmp	r3, #0
+ 8000958:	d147      	bne.n	80009ea <MGPIO_voidSetPinValue+0xde>
+					GPIOA ->GPIO_ODR &=~ (1 << Copy_PinNumber);  //Setting the ODR Value
+ 800095a:	4b29      	ldr	r3, [pc, #164]	; (8000a00 <MGPIO_voidSetPinValue+0xf4>)
+ 800095c:	68db      	ldr	r3, [r3, #12]
+ 800095e:	79fa      	ldrb	r2, [r7, #7]
+ 8000960:	2101      	movs	r1, #1
+ 8000962:	fa01 f202 	lsl.w	r2, r1, r2
+ 8000966:	43d2      	mvns	r2, r2
+ 8000968:	4611      	mov	r1, r2
+ 800096a:	4a25      	ldr	r2, [pc, #148]	; (8000a00 <MGPIO_voidSetPinValue+0xf4>)
+ 800096c:	400b      	ands	r3, r1
+ 800096e:	60d3      	str	r3, [r2, #12]
+				break;
+ 8000970:	e03b      	b.n	80009ea <MGPIO_voidSetPinValue+0xde>
+				if (Copy_u8Value==High)							  //Checking on High Signal
+ 8000972:	797b      	ldrb	r3, [r7, #5]
+ 8000974:	2b01      	cmp	r3, #1
+ 8000976:	d10a      	bne.n	800098e <MGPIO_voidSetPinValue+0x82>
+					GPIOB ->GPIO_ODR |= (1 << Copy_PinNumber);    //Setting the ODR Value
+ 8000978:	4b22      	ldr	r3, [pc, #136]	; (8000a04 <MGPIO_voidSetPinValue+0xf8>)
+ 800097a:	68db      	ldr	r3, [r3, #12]
+ 800097c:	79fa      	ldrb	r2, [r7, #7]
+ 800097e:	2101      	movs	r1, #1
+ 8000980:	fa01 f202 	lsl.w	r2, r1, r2
+ 8000984:	4611      	mov	r1, r2
+ 8000986:	4a1f      	ldr	r2, [pc, #124]	; (8000a04 <MGPIO_voidSetPinValue+0xf8>)
+ 8000988:	430b      	orrs	r3, r1
+ 800098a:	60d3      	str	r3, [r2, #12]
+				break;
+ 800098c:	e02f      	b.n	80009ee <MGPIO_voidSetPinValue+0xe2>
+				else if (Copy_u8Value==Low)                       //Checking on Low Signal
+ 800098e:	797b      	ldrb	r3, [r7, #5]
+ 8000990:	2b00      	cmp	r3, #0
+ 8000992:	d12c      	bne.n	80009ee <MGPIO_voidSetPinValue+0xe2>
+					GPIOB ->GPIO_ODR &=~ (1 << Copy_PinNumber);   //Setting the ODR Value
+ 8000994:	4b1b      	ldr	r3, [pc, #108]	; (8000a04 <MGPIO_voidSetPinValue+0xf8>)
+ 8000996:	68db      	ldr	r3, [r3, #12]
+ 8000998:	79fa      	ldrb	r2, [r7, #7]
+ 800099a:	2101      	movs	r1, #1
+ 800099c:	fa01 f202 	lsl.w	r2, r1, r2
+ 80009a0:	43d2      	mvns	r2, r2
+ 80009a2:	4611      	mov	r1, r2
+ 80009a4:	4a17      	ldr	r2, [pc, #92]	; (8000a04 <MGPIO_voidSetPinValue+0xf8>)
+ 80009a6:	400b      	ands	r3, r1
+ 80009a8:	60d3      	str	r3, [r2, #12]
+				break;
+ 80009aa:	e020      	b.n	80009ee <MGPIO_voidSetPinValue+0xe2>
+				if (Copy_u8Value==High)
+ 80009ac:	797b      	ldrb	r3, [r7, #5]
+ 80009ae:	2b01      	cmp	r3, #1
+ 80009b0:	d10a      	bne.n	80009c8 <MGPIO_voidSetPinValue+0xbc>
+					GPIOC ->GPIO_ODR |= (1 << Copy_PinNumber); //Setting the ODR Value
+ 80009b2:	4b15      	ldr	r3, [pc, #84]	; (8000a08 <MGPIO_voidSetPinValue+0xfc>)
+ 80009b4:	68db      	ldr	r3, [r3, #12]
+ 80009b6:	79fa      	ldrb	r2, [r7, #7]
+ 80009b8:	2101      	movs	r1, #1
+ 80009ba:	fa01 f202 	lsl.w	r2, r1, r2
+ 80009be:	4611      	mov	r1, r2
+ 80009c0:	4a11      	ldr	r2, [pc, #68]	; (8000a08 <MGPIO_voidSetPinValue+0xfc>)
+ 80009c2:	430b      	orrs	r3, r1
+ 80009c4:	60d3      	str	r3, [r2, #12]
+				break;
+ 80009c6:	e014      	b.n	80009f2 <MGPIO_voidSetPinValue+0xe6>
+				else if (Copy_u8Value==Low)
+ 80009c8:	797b      	ldrb	r3, [r7, #5]
+ 80009ca:	2b00      	cmp	r3, #0
+ 80009cc:	d111      	bne.n	80009f2 <MGPIO_voidSetPinValue+0xe6>
+					GPIOC ->GPIO_ODR &=~ (1 << Copy_PinNumber);   //Setting the ODR Value
+ 80009ce:	4b0e      	ldr	r3, [pc, #56]	; (8000a08 <MGPIO_voidSetPinValue+0xfc>)
+ 80009d0:	68db      	ldr	r3, [r3, #12]
+ 80009d2:	79fa      	ldrb	r2, [r7, #7]
+ 80009d4:	2101      	movs	r1, #1
+ 80009d6:	fa01 f202 	lsl.w	r2, r1, r2
+ 80009da:	43d2      	mvns	r2, r2
+ 80009dc:	4611      	mov	r1, r2
+ 80009de:	4a0a      	ldr	r2, [pc, #40]	; (8000a08 <MGPIO_voidSetPinValue+0xfc>)
+ 80009e0:	400b      	ands	r3, r1
+ 80009e2:	60d3      	str	r3, [r2, #12]
+				break;
+ 80009e4:	e005      	b.n	80009f2 <MGPIO_voidSetPinValue+0xe6>
+				break;
+ 80009e6:	bf00      	nop
+ 80009e8:	e004      	b.n	80009f4 <MGPIO_voidSetPinValue+0xe8>
+				break;
+ 80009ea:	bf00      	nop
+ 80009ec:	e002      	b.n	80009f4 <MGPIO_voidSetPinValue+0xe8>
+				break;
+ 80009ee:	bf00      	nop
+ 80009f0:	e000      	b.n	80009f4 <MGPIO_voidSetPinValue+0xe8>
+				break;
+ 80009f2:	bf00      	nop
+		}
+	}
+}
+ 80009f4:	bf00      	nop
+ 80009f6:	370c      	adds	r7, #12
+ 80009f8:	46bd      	mov	sp, r7
+ 80009fa:	bc80      	pop	{r7}
+ 80009fc:	4770      	bx	lr
+ 80009fe:	bf00      	nop
+ 8000a00:	40010800 	.word	0x40010800
+ 8000a04:	40010c00 	.word	0x40010c00
+ 8000a08:	40011000 	.word	0x40011000
+
+08000a0c <MRCC_voidClkInit>:
+/*I/P Parameters: nothing						 							  */
+/*Returns:void                              				  */
+/*Desc:This Function to enable The Clock due to pre-configurations	   	      */
+/******************************************************************************/
+void MRCC_voidClkInit(void)
+{
+ 8000a0c:	b580      	push	{r7, lr}
+ 8000a0e:	af00      	add	r7, sp, #0
+
+  #endif
+
+  #if ClkSource == HSI
+	/*HSI ON*/
+		 MRCC_voidSetClkStatus(HSI_Enable,ON);
+ 8000a10:	2101      	movs	r1, #1
+ 8000a12:	2000      	movs	r0, #0
+ 8000a14:	f000 f8a8 	bl	8000b68 <MRCC_voidSetClkStatus>
+	/*pull on Flag to check on the HSE if ready or not*/
+	while(((RCC ->RCC_CR>>1)& 0x00000001)!=1);
+ 8000a18:	bf00      	nop
+ 8000a1a:	4b0a      	ldr	r3, [pc, #40]	; (8000a44 <MRCC_voidClkInit+0x38>)
+ 8000a1c:	681b      	ldr	r3, [r3, #0]
+ 8000a1e:	085b      	lsrs	r3, r3, #1
+ 8000a20:	f003 0301 	and.w	r3, r3, #1
+ 8000a24:	2b01      	cmp	r3, #1
+ 8000a26:	d1f8      	bne.n	8000a1a <MRCC_voidClkInit+0xe>
+		MRCC_voidSetClkSource(HSI);
+ 8000a28:	2000      	movs	r0, #0
+ 8000a2a:	f000 f80d 	bl	8000a48 <MRCC_voidSetClkSource>
+	/*PLL OFF*/
+		MRCC_voidSetClkStatus(PLL_Enable,OFF);
+ 8000a2e:	2100      	movs	r1, #0
+ 8000a30:	f04f 7080 	mov.w	r0, #16777216	; 0x1000000
+ 8000a34:	f000 f898 	bl	8000b68 <MRCC_voidSetClkStatus>
+	/*HSE OFF*/
+		MRCC_voidSetClkStatus(HSE_Enable,OFF);
+ 8000a38:	2100      	movs	r1, #0
+ 8000a3a:	2001      	movs	r0, #1
+ 8000a3c:	f000 f894 	bl	8000b68 <MRCC_voidSetClkStatus>
+		default:
+			break;
+	}
+  #endif
+
+}
+ 8000a40:	bf00      	nop
+ 8000a42:	bd80      	pop	{r7, pc}
+ 8000a44:	40021000 	.word	0x40021000
+
+08000a48 <MRCC_voidSetClkSource>:
+/*Desc:This Function Set the Clock source for my micro-controller	          */
+/******************************************************************************/
+/*Options:-   - HSI 	  - HSE		   - PLL				 				  */
+/******************************************************************************/
+void MRCC_voidSetClkSource (u32 Copy_u32Source)
+{
+ 8000a48:	b480      	push	{r7}
+ 8000a4a:	b083      	sub	sp, #12
+ 8000a4c:	af00      	add	r7, sp, #0
+ 8000a4e:	6078      	str	r0, [r7, #4]
+	/* Switching on the clock sources */
+  switch (Copy_u32Source)
+ 8000a50:	687b      	ldr	r3, [r7, #4]
+ 8000a52:	2b02      	cmp	r3, #2
+ 8000a54:	d023      	beq.n	8000a9e <MRCC_voidSetClkSource+0x56>
+ 8000a56:	687b      	ldr	r3, [r7, #4]
+ 8000a58:	2b02      	cmp	r3, #2
+ 8000a5a:	d82d      	bhi.n	8000ab8 <MRCC_voidSetClkSource+0x70>
+ 8000a5c:	687b      	ldr	r3, [r7, #4]
+ 8000a5e:	2b00      	cmp	r3, #0
+ 8000a60:	d003      	beq.n	8000a6a <MRCC_voidSetClkSource+0x22>
+ 8000a62:	687b      	ldr	r3, [r7, #4]
+ 8000a64:	2b01      	cmp	r3, #1
+ 8000a66:	d00d      	beq.n	8000a84 <MRCC_voidSetClkSource+0x3c>
+	case PLL:
+				RCC ->RCC_CFGR &= SW_Resetmask;
+				RCC ->RCC_CFGR |= Copy_u32Source;
+				break;
+	default:
+		break;
+ 8000a68:	e026      	b.n	8000ab8 <MRCC_voidSetClkSource+0x70>
+				RCC ->RCC_CFGR &= SW_Resetmask;
+ 8000a6a:	4b16      	ldr	r3, [pc, #88]	; (8000ac4 <MRCC_voidSetClkSource+0x7c>)
+ 8000a6c:	685b      	ldr	r3, [r3, #4]
+ 8000a6e:	4a15      	ldr	r2, [pc, #84]	; (8000ac4 <MRCC_voidSetClkSource+0x7c>)
+ 8000a70:	f023 0303 	bic.w	r3, r3, #3
+ 8000a74:	6053      	str	r3, [r2, #4]
+				RCC ->RCC_CFGR |= Copy_u32Source;
+ 8000a76:	4b13      	ldr	r3, [pc, #76]	; (8000ac4 <MRCC_voidSetClkSource+0x7c>)
+ 8000a78:	685a      	ldr	r2, [r3, #4]
+ 8000a7a:	4912      	ldr	r1, [pc, #72]	; (8000ac4 <MRCC_voidSetClkSource+0x7c>)
+ 8000a7c:	687b      	ldr	r3, [r7, #4]
+ 8000a7e:	4313      	orrs	r3, r2
+ 8000a80:	604b      	str	r3, [r1, #4]
+				break;
+ 8000a82:	e01a      	b.n	8000aba <MRCC_voidSetClkSource+0x72>
+			    RCC ->RCC_CFGR &= SW_Resetmask;
+ 8000a84:	4b0f      	ldr	r3, [pc, #60]	; (8000ac4 <MRCC_voidSetClkSource+0x7c>)
+ 8000a86:	685b      	ldr	r3, [r3, #4]
+ 8000a88:	4a0e      	ldr	r2, [pc, #56]	; (8000ac4 <MRCC_voidSetClkSource+0x7c>)
+ 8000a8a:	f023 0303 	bic.w	r3, r3, #3
+ 8000a8e:	6053      	str	r3, [r2, #4]
+				RCC ->RCC_CFGR |= Copy_u32Source;
+ 8000a90:	4b0c      	ldr	r3, [pc, #48]	; (8000ac4 <MRCC_voidSetClkSource+0x7c>)
+ 8000a92:	685a      	ldr	r2, [r3, #4]
+ 8000a94:	490b      	ldr	r1, [pc, #44]	; (8000ac4 <MRCC_voidSetClkSource+0x7c>)
+ 8000a96:	687b      	ldr	r3, [r7, #4]
+ 8000a98:	4313      	orrs	r3, r2
+ 8000a9a:	604b      	str	r3, [r1, #4]
+				break;
+ 8000a9c:	e00d      	b.n	8000aba <MRCC_voidSetClkSource+0x72>
+				RCC ->RCC_CFGR &= SW_Resetmask;
+ 8000a9e:	4b09      	ldr	r3, [pc, #36]	; (8000ac4 <MRCC_voidSetClkSource+0x7c>)
+ 8000aa0:	685b      	ldr	r3, [r3, #4]
+ 8000aa2:	4a08      	ldr	r2, [pc, #32]	; (8000ac4 <MRCC_voidSetClkSource+0x7c>)
+ 8000aa4:	f023 0303 	bic.w	r3, r3, #3
+ 8000aa8:	6053      	str	r3, [r2, #4]
+				RCC ->RCC_CFGR |= Copy_u32Source;
+ 8000aaa:	4b06      	ldr	r3, [pc, #24]	; (8000ac4 <MRCC_voidSetClkSource+0x7c>)
+ 8000aac:	685a      	ldr	r2, [r3, #4]
+ 8000aae:	4905      	ldr	r1, [pc, #20]	; (8000ac4 <MRCC_voidSetClkSource+0x7c>)
+ 8000ab0:	687b      	ldr	r3, [r7, #4]
+ 8000ab2:	4313      	orrs	r3, r2
+ 8000ab4:	604b      	str	r3, [r1, #4]
+				break;
+ 8000ab6:	e000      	b.n	8000aba <MRCC_voidSetClkSource+0x72>
+		break;
+ 8000ab8:	bf00      	nop
+}
+	}
+ 8000aba:	bf00      	nop
+ 8000abc:	370c      	adds	r7, #12
+ 8000abe:	46bd      	mov	sp, r7
+ 8000ac0:	bc80      	pop	{r7}
+ 8000ac2:	4770      	bx	lr
+ 8000ac4:	40021000 	.word	0x40021000
+
+08000ac8 <MRCC_voidSetPeripheralclock>:
+/* Copy_u8Bus         :-    - AHB   - APB1   - APB2							  */
+/* Copy_u32peripheral :-    Choose peripheral From Configuration File		  */
+/* Copy_u8State       :-    - ON    - OFF									  */
+/******************************************************************************/
+void MRCC_voidSetPeripheralclock (u8 Copy_u8Bus, u32 Copy_u32peripheral, u8 Copy_u8State)
+{
+ 8000ac8:	b480      	push	{r7}
+ 8000aca:	b083      	sub	sp, #12
+ 8000acc:	af00      	add	r7, sp, #0
+ 8000ace:	4603      	mov	r3, r0
+ 8000ad0:	6039      	str	r1, [r7, #0]
+ 8000ad2:	71fb      	strb	r3, [r7, #7]
+ 8000ad4:	4613      	mov	r3, r2
+ 8000ad6:	71bb      	strb	r3, [r7, #6]
+	/* Switching on buses of peripherals (AHB, APB1, APB2) */
+	switch (Copy_u8Bus)
+ 8000ad8:	79fb      	ldrb	r3, [r7, #7]
+ 8000ada:	2b02      	cmp	r3, #2
+ 8000adc:	d02a      	beq.n	8000b34 <MRCC_voidSetPeripheralclock+0x6c>
+ 8000ade:	2b02      	cmp	r3, #2
+ 8000ae0:	dc3a      	bgt.n	8000b58 <MRCC_voidSetPeripheralclock+0x90>
+ 8000ae2:	2b00      	cmp	r3, #0
+ 8000ae4:	d002      	beq.n	8000aec <MRCC_voidSetPeripheralclock+0x24>
+ 8000ae6:	2b01      	cmp	r3, #1
+ 8000ae8:	d012      	beq.n	8000b10 <MRCC_voidSetPeripheralclock+0x48>
+					  /* Setting the peripheral bit with zero to disable the peripheral */
+					  RCC ->RCC_APB2ENR &= ~Copy_u32peripheral;
+				  }
+				  break;
+		default:
+			break;
+ 8000aea:	e035      	b.n	8000b58 <MRCC_voidSetPeripheralclock+0x90>
+				  if (Copy_u8State==ON)
+ 8000aec:	79bb      	ldrb	r3, [r7, #6]
+ 8000aee:	2b01      	cmp	r3, #1
+ 8000af0:	d106      	bne.n	8000b00 <MRCC_voidSetPeripheralclock+0x38>
+					  RCC ->RCC_AHBENR |= Copy_u32peripheral;
+ 8000af2:	4b1c      	ldr	r3, [pc, #112]	; (8000b64 <MRCC_voidSetPeripheralclock+0x9c>)
+ 8000af4:	695a      	ldr	r2, [r3, #20]
+ 8000af6:	491b      	ldr	r1, [pc, #108]	; (8000b64 <MRCC_voidSetPeripheralclock+0x9c>)
+ 8000af8:	683b      	ldr	r3, [r7, #0]
+ 8000afa:	4313      	orrs	r3, r2
+ 8000afc:	614b      	str	r3, [r1, #20]
+				  break;
+ 8000afe:	e02c      	b.n	8000b5a <MRCC_voidSetPeripheralclock+0x92>
+					  RCC ->RCC_AHBENR &= ~Copy_u32peripheral;
+ 8000b00:	4b18      	ldr	r3, [pc, #96]	; (8000b64 <MRCC_voidSetPeripheralclock+0x9c>)
+ 8000b02:	695a      	ldr	r2, [r3, #20]
+ 8000b04:	683b      	ldr	r3, [r7, #0]
+ 8000b06:	43db      	mvns	r3, r3
+ 8000b08:	4916      	ldr	r1, [pc, #88]	; (8000b64 <MRCC_voidSetPeripheralclock+0x9c>)
+ 8000b0a:	4013      	ands	r3, r2
+ 8000b0c:	614b      	str	r3, [r1, #20]
+				  break;
+ 8000b0e:	e024      	b.n	8000b5a <MRCC_voidSetPeripheralclock+0x92>
+				  if (Copy_u8State==ON)
+ 8000b10:	79bb      	ldrb	r3, [r7, #6]
+ 8000b12:	2b01      	cmp	r3, #1
+ 8000b14:	d106      	bne.n	8000b24 <MRCC_voidSetPeripheralclock+0x5c>
+					  RCC ->RCC_APB1ENR |= Copy_u32peripheral;
+ 8000b16:	4b13      	ldr	r3, [pc, #76]	; (8000b64 <MRCC_voidSetPeripheralclock+0x9c>)
+ 8000b18:	69da      	ldr	r2, [r3, #28]
+ 8000b1a:	4912      	ldr	r1, [pc, #72]	; (8000b64 <MRCC_voidSetPeripheralclock+0x9c>)
+ 8000b1c:	683b      	ldr	r3, [r7, #0]
+ 8000b1e:	4313      	orrs	r3, r2
+ 8000b20:	61cb      	str	r3, [r1, #28]
+				  break;
+ 8000b22:	e01a      	b.n	8000b5a <MRCC_voidSetPeripheralclock+0x92>
+					  RCC ->RCC_APB1ENR &= ~Copy_u32peripheral;
+ 8000b24:	4b0f      	ldr	r3, [pc, #60]	; (8000b64 <MRCC_voidSetPeripheralclock+0x9c>)
+ 8000b26:	69da      	ldr	r2, [r3, #28]
+ 8000b28:	683b      	ldr	r3, [r7, #0]
+ 8000b2a:	43db      	mvns	r3, r3
+ 8000b2c:	490d      	ldr	r1, [pc, #52]	; (8000b64 <MRCC_voidSetPeripheralclock+0x9c>)
+ 8000b2e:	4013      	ands	r3, r2
+ 8000b30:	61cb      	str	r3, [r1, #28]
+				  break;
+ 8000b32:	e012      	b.n	8000b5a <MRCC_voidSetPeripheralclock+0x92>
+				  if (Copy_u8State==ON)
+ 8000b34:	79bb      	ldrb	r3, [r7, #6]
+ 8000b36:	2b01      	cmp	r3, #1
+ 8000b38:	d106      	bne.n	8000b48 <MRCC_voidSetPeripheralclock+0x80>
+					  RCC ->RCC_APB2ENR |= Copy_u32peripheral;
+ 8000b3a:	4b0a      	ldr	r3, [pc, #40]	; (8000b64 <MRCC_voidSetPeripheralclock+0x9c>)
+ 8000b3c:	699a      	ldr	r2, [r3, #24]
+ 8000b3e:	4909      	ldr	r1, [pc, #36]	; (8000b64 <MRCC_voidSetPeripheralclock+0x9c>)
+ 8000b40:	683b      	ldr	r3, [r7, #0]
+ 8000b42:	4313      	orrs	r3, r2
+ 8000b44:	618b      	str	r3, [r1, #24]
+				  break;
+ 8000b46:	e008      	b.n	8000b5a <MRCC_voidSetPeripheralclock+0x92>
+					  RCC ->RCC_APB2ENR &= ~Copy_u32peripheral;
+ 8000b48:	4b06      	ldr	r3, [pc, #24]	; (8000b64 <MRCC_voidSetPeripheralclock+0x9c>)
+ 8000b4a:	699a      	ldr	r2, [r3, #24]
+ 8000b4c:	683b      	ldr	r3, [r7, #0]
+ 8000b4e:	43db      	mvns	r3, r3
+ 8000b50:	4904      	ldr	r1, [pc, #16]	; (8000b64 <MRCC_voidSetPeripheralclock+0x9c>)
+ 8000b52:	4013      	ands	r3, r2
+ 8000b54:	618b      	str	r3, [r1, #24]
+				  break;
+ 8000b56:	e000      	b.n	8000b5a <MRCC_voidSetPeripheralclock+0x92>
+			break;
+ 8000b58:	bf00      	nop
+	}
+}
+ 8000b5a:	bf00      	nop
+ 8000b5c:	370c      	adds	r7, #12
+ 8000b5e:	46bd      	mov	sp, r7
+ 8000b60:	bc80      	pop	{r7}
+ 8000b62:	4770      	bx	lr
+ 8000b64:	40021000 	.word	0x40021000
+
+08000b68 <MRCC_voidSetClkStatus>:
+/******************************************************************************/
+/* Copy_u32Source :-  - HSI_Enable    - HSE_Enable    - PLL_Enable		      */
+/* Copy_u8State   :-  - ON            - OFF									  */
+/******************************************************************************/
+void MRCC_voidSetClkStatus (u32 Copy_u32Source, u8 Copy_u8State)
+{
+ 8000b68:	b480      	push	{r7}
+ 8000b6a:	b083      	sub	sp, #12
+ 8000b6c:	af00      	add	r7, sp, #0
+ 8000b6e:	6078      	str	r0, [r7, #4]
+ 8000b70:	460b      	mov	r3, r1
+ 8000b72:	70fb      	strb	r3, [r7, #3]
+	/* Switching on the clock sources (HSI, HSE, PLL) */
+	switch (Copy_u32Source) {
+ 8000b74:	687b      	ldr	r3, [r7, #4]
+ 8000b76:	f1b3 7f80 	cmp.w	r3, #16777216	; 0x1000000
+ 8000b7a:	d02e      	beq.n	8000bda <MRCC_voidSetClkStatus+0x72>
+ 8000b7c:	687b      	ldr	r3, [r7, #4]
+ 8000b7e:	f1b3 7f80 	cmp.w	r3, #16777216	; 0x1000000
+ 8000b82:	d83c      	bhi.n	8000bfe <MRCC_voidSetClkStatus+0x96>
+ 8000b84:	687b      	ldr	r3, [r7, #4]
+ 8000b86:	2b00      	cmp	r3, #0
+ 8000b88:	d003      	beq.n	8000b92 <MRCC_voidSetClkStatus+0x2a>
+ 8000b8a:	687b      	ldr	r3, [r7, #4]
+ 8000b8c:	2b01      	cmp	r3, #1
+ 8000b8e:	d012      	beq.n	8000bb6 <MRCC_voidSetClkStatus+0x4e>
+						  /* Setting the PLL bit with zero to disable it */
+						  RCC ->RCC_CR &= ~Copy_u32Source;
+						 }
+						 break;
+		default:
+			break;
+ 8000b90:	e035      	b.n	8000bfe <MRCC_voidSetClkStatus+0x96>
+						 if (Copy_u8State==ON)
+ 8000b92:	78fb      	ldrb	r3, [r7, #3]
+ 8000b94:	2b01      	cmp	r3, #1
+ 8000b96:	d106      	bne.n	8000ba6 <MRCC_voidSetClkStatus+0x3e>
+						  RCC ->RCC_CR |= Copy_u32Source;
+ 8000b98:	4b1c      	ldr	r3, [pc, #112]	; (8000c0c <MRCC_voidSetClkStatus+0xa4>)
+ 8000b9a:	681a      	ldr	r2, [r3, #0]
+ 8000b9c:	491b      	ldr	r1, [pc, #108]	; (8000c0c <MRCC_voidSetClkStatus+0xa4>)
+ 8000b9e:	687b      	ldr	r3, [r7, #4]
+ 8000ba0:	4313      	orrs	r3, r2
+ 8000ba2:	600b      	str	r3, [r1, #0]
+						 break;
+ 8000ba4:	e02c      	b.n	8000c00 <MRCC_voidSetClkStatus+0x98>
+						  RCC ->RCC_CR &= ~Copy_u32Source;
+ 8000ba6:	4b19      	ldr	r3, [pc, #100]	; (8000c0c <MRCC_voidSetClkStatus+0xa4>)
+ 8000ba8:	681a      	ldr	r2, [r3, #0]
+ 8000baa:	687b      	ldr	r3, [r7, #4]
+ 8000bac:	43db      	mvns	r3, r3
+ 8000bae:	4917      	ldr	r1, [pc, #92]	; (8000c0c <MRCC_voidSetClkStatus+0xa4>)
+ 8000bb0:	4013      	ands	r3, r2
+ 8000bb2:	600b      	str	r3, [r1, #0]
+						 break;
+ 8000bb4:	e024      	b.n	8000c00 <MRCC_voidSetClkStatus+0x98>
+						 if (Copy_u8State==ON)
+ 8000bb6:	78fb      	ldrb	r3, [r7, #3]
+ 8000bb8:	2b01      	cmp	r3, #1
+ 8000bba:	d106      	bne.n	8000bca <MRCC_voidSetClkStatus+0x62>
+						  RCC ->RCC_CR |= Copy_u32Source;
+ 8000bbc:	4b13      	ldr	r3, [pc, #76]	; (8000c0c <MRCC_voidSetClkStatus+0xa4>)
+ 8000bbe:	681a      	ldr	r2, [r3, #0]
+ 8000bc0:	4912      	ldr	r1, [pc, #72]	; (8000c0c <MRCC_voidSetClkStatus+0xa4>)
+ 8000bc2:	687b      	ldr	r3, [r7, #4]
+ 8000bc4:	4313      	orrs	r3, r2
+ 8000bc6:	600b      	str	r3, [r1, #0]
+						 break;
+ 8000bc8:	e01a      	b.n	8000c00 <MRCC_voidSetClkStatus+0x98>
+						  RCC ->RCC_CR &= ~Copy_u32Source;
+ 8000bca:	4b10      	ldr	r3, [pc, #64]	; (8000c0c <MRCC_voidSetClkStatus+0xa4>)
+ 8000bcc:	681a      	ldr	r2, [r3, #0]
+ 8000bce:	687b      	ldr	r3, [r7, #4]
+ 8000bd0:	43db      	mvns	r3, r3
+ 8000bd2:	490e      	ldr	r1, [pc, #56]	; (8000c0c <MRCC_voidSetClkStatus+0xa4>)
+ 8000bd4:	4013      	ands	r3, r2
+ 8000bd6:	600b      	str	r3, [r1, #0]
+						 break;
+ 8000bd8:	e012      	b.n	8000c00 <MRCC_voidSetClkStatus+0x98>
+						 if (Copy_u8State==ON)
+ 8000bda:	78fb      	ldrb	r3, [r7, #3]
+ 8000bdc:	2b01      	cmp	r3, #1
+ 8000bde:	d106      	bne.n	8000bee <MRCC_voidSetClkStatus+0x86>
+						  RCC ->RCC_CR |= Copy_u32Source;
+ 8000be0:	4b0a      	ldr	r3, [pc, #40]	; (8000c0c <MRCC_voidSetClkStatus+0xa4>)
+ 8000be2:	681a      	ldr	r2, [r3, #0]
+ 8000be4:	4909      	ldr	r1, [pc, #36]	; (8000c0c <MRCC_voidSetClkStatus+0xa4>)
+ 8000be6:	687b      	ldr	r3, [r7, #4]
+ 8000be8:	4313      	orrs	r3, r2
+ 8000bea:	600b      	str	r3, [r1, #0]
+						 break;
+ 8000bec:	e008      	b.n	8000c00 <MRCC_voidSetClkStatus+0x98>
+						  RCC ->RCC_CR &= ~Copy_u32Source;
+ 8000bee:	4b07      	ldr	r3, [pc, #28]	; (8000c0c <MRCC_voidSetClkStatus+0xa4>)
+ 8000bf0:	681a      	ldr	r2, [r3, #0]
+ 8000bf2:	687b      	ldr	r3, [r7, #4]
+ 8000bf4:	43db      	mvns	r3, r3
+ 8000bf6:	4905      	ldr	r1, [pc, #20]	; (8000c0c <MRCC_voidSetClkStatus+0xa4>)
+ 8000bf8:	4013      	ands	r3, r2
+ 8000bfa:	600b      	str	r3, [r1, #0]
+						 break;
+ 8000bfc:	e000      	b.n	8000c00 <MRCC_voidSetClkStatus+0x98>
+			break;
+ 8000bfe:	bf00      	nop
+	}
+}
+ 8000c00:	bf00      	nop
+ 8000c02:	370c      	adds	r7, #12
+ 8000c04:	46bd      	mov	sp, r7
+ 8000c06:	bc80      	pop	{r7}
+ 8000c08:	4770      	bx	lr
+ 8000c0a:	bf00      	nop
+ 8000c0c:	40021000 	.word	0x40021000
+
+08000c10 <MSYSTICk_voidEnable>:
+/*I/P Parameters: void			            								  */
+/*Returns:it returns Error Status                            				  */
+/*Desc:This Function enables the SYSTICK Timer						          */
+/******************************************************************************/
+void MSYSTICk_voidEnable(void)
+{
+ 8000c10:	b480      	push	{r7}
+ 8000c12:	af00      	add	r7, sp, #0
+	/* Enable The SYSTICK Timer */
+	SET_BIT(STK->CTRL, STK_CTRL_ENABLE_BIT);
+ 8000c14:	4b04      	ldr	r3, [pc, #16]	; (8000c28 <MSYSTICk_voidEnable+0x18>)
+ 8000c16:	681b      	ldr	r3, [r3, #0]
+ 8000c18:	4a03      	ldr	r2, [pc, #12]	; (8000c28 <MSYSTICk_voidEnable+0x18>)
+ 8000c1a:	f043 0301 	orr.w	r3, r3, #1
+ 8000c1e:	6013      	str	r3, [r2, #0]
+
+}
+ 8000c20:	bf00      	nop
+ 8000c22:	46bd      	mov	sp, r7
+ 8000c24:	bc80      	pop	{r7}
+ 8000c26:	4770      	bx	lr
+ 8000c28:	e000e010 	.word	0xe000e010
+
+08000c2c <MSYSTICK_voidSetBusyWait>:
+/*copy_TickType OPTIONS: NANO_SEC, MILLI_SEC, MICRO_SEC, SEC				  */
+/*Returns:it returns nothing	                            				  */
+/*Desc:Makes a delay for number of ticks(This holds the processor)		      */
+/******************************************************************************/
+void MSYSTICK_voidSetBusyWait(u32 copy_u32Ticks, u8 copy_u8TickType)
+{
+ 8000c2c:	b480      	push	{r7}
+ 8000c2e:	b083      	sub	sp, #12
+ 8000c30:	af00      	add	r7, sp, #0
+ 8000c32:	6078      	str	r0, [r7, #4]
+ 8000c34:	460b      	mov	r3, r1
+ 8000c36:	70fb      	strb	r3, [r7, #3]
+		
+		else if( copy_u8TickType == SEC)
+			copy_u32Ticks *= 8000000;
+	}
+	#elif	(SYSTICK_CLK == AHB_DIVIDED_BY_8_CLK)
+		if (copy_u8TickType   == NANO_SEC)
+ 8000c38:	78fb      	ldrb	r3, [r7, #3]
+ 8000c3a:	2b00      	cmp	r3, #0
+ 8000c3c:	d107      	bne.n	8000c4e <MSYSTICK_voidSetBusyWait+0x22>
+			copy_u32Ticks *= (10^(-3));
+ 8000c3e:	687a      	ldr	r2, [r7, #4]
+ 8000c40:	4613      	mov	r3, r2
+ 8000c42:	075b      	lsls	r3, r3, #29
+ 8000c44:	1a9b      	subs	r3, r3, r2
+ 8000c46:	00db      	lsls	r3, r3, #3
+ 8000c48:	1a9b      	subs	r3, r3, r2
+ 8000c4a:	607b      	str	r3, [r7, #4]
+ 8000c4c:	e014      	b.n	8000c78 <MSYSTICK_voidSetBusyWait+0x4c>
+		
+		else if (copy_u8TickType == MILLI_SEC)
+ 8000c4e:	78fb      	ldrb	r3, [r7, #3]
+ 8000c50:	2b01      	cmp	r3, #1
+ 8000c52:	d106      	bne.n	8000c62 <MSYSTICK_voidSetBusyWait+0x36>
+			copy_u32Ticks *= 1000;
+ 8000c54:	687b      	ldr	r3, [r7, #4]
+ 8000c56:	f44f 727a 	mov.w	r2, #1000	; 0x3e8
+ 8000c5a:	fb02 f303 	mul.w	r3, r2, r3
+ 8000c5e:	607b      	str	r3, [r7, #4]
+ 8000c60:	e00a      	b.n	8000c78 <MSYSTICK_voidSetBusyWait+0x4c>
+		
+		else if (copy_u8TickType == MICRO_SEC)
+ 8000c62:	78fb      	ldrb	r3, [r7, #3]
+ 8000c64:	2b02      	cmp	r3, #2
+ 8000c66:	d007      	beq.n	8000c78 <MSYSTICK_voidSetBusyWait+0x4c>
+			copy_u32Ticks *= 1;
+		
+		else if (copy_u8TickType == SEC)
+ 8000c68:	78fb      	ldrb	r3, [r7, #3]
+ 8000c6a:	2b03      	cmp	r3, #3
+ 8000c6c:	d104      	bne.n	8000c78 <MSYSTICK_voidSetBusyWait+0x4c>
+			copy_u32Ticks *= 1000000;
+ 8000c6e:	687b      	ldr	r3, [r7, #4]
+ 8000c70:	4a18      	ldr	r2, [pc, #96]	; (8000cd4 <MSYSTICK_voidSetBusyWait+0xa8>)
+ 8000c72:	fb02 f303 	mul.w	r3, r2, r3
+ 8000c76:	607b      	str	r3, [r7, #4]
+		else
+		{
+
+		}
+	#endif
+	if(copy_u32Ticks < 16777216)
+ 8000c78:	687b      	ldr	r3, [r7, #4]
+ 8000c7a:	f1b3 7f80 	cmp.w	r3, #16777216	; 0x1000000
+ 8000c7e:	d223      	bcs.n	8000cc8 <MSYSTICK_voidSetBusyWait+0x9c>
+	{
+		/* Update the Load registers with number of Ticks or counts */
+		STK->LOAD  =  0x00000000;
+ 8000c80:	4b15      	ldr	r3, [pc, #84]	; (8000cd8 <MSYSTICK_voidSetBusyWait+0xac>)
+ 8000c82:	2200      	movs	r2, #0
+ 8000c84:	605a      	str	r2, [r3, #4]
+		STK->LOAD = copy_u32Ticks;
+ 8000c86:	4a14      	ldr	r2, [pc, #80]	; (8000cd8 <MSYSTICK_voidSetBusyWait+0xac>)
+ 8000c88:	687b      	ldr	r3, [r7, #4]
+ 8000c8a:	6053      	str	r3, [r2, #4]
+		STK->VAL  = PRELOAD_VALUE;
+ 8000c8c:	4b12      	ldr	r3, [pc, #72]	; (8000cd8 <MSYSTICK_voidSetBusyWait+0xac>)
+ 8000c8e:	f242 7210 	movw	r2, #10000	; 0x2710
+ 8000c92:	609a      	str	r2, [r3, #8]
+
+		/* Enable the Timer */
+		SET_BIT(STK->CTRL, STK_CTRL_ENABLE_BIT);
+ 8000c94:	4b10      	ldr	r3, [pc, #64]	; (8000cd8 <MSYSTICK_voidSetBusyWait+0xac>)
+ 8000c96:	681b      	ldr	r3, [r3, #0]
+ 8000c98:	4a0f      	ldr	r2, [pc, #60]	; (8000cd8 <MSYSTICK_voidSetBusyWait+0xac>)
+ 8000c9a:	f043 0301 	orr.w	r3, r3, #1
+ 8000c9e:	6013      	str	r3, [r2, #0]
+
+		/* Polling on the flag of the timer */
+		while (GET_BIT(STK->CTRL,STK_CTRL_COUNTFLAG_BIT)==0);
+ 8000ca0:	bf00      	nop
+ 8000ca2:	4b0d      	ldr	r3, [pc, #52]	; (8000cd8 <MSYSTICK_voidSetBusyWait+0xac>)
+ 8000ca4:	681b      	ldr	r3, [r3, #0]
+ 8000ca6:	0c1b      	lsrs	r3, r3, #16
+ 8000ca8:	f003 0301 	and.w	r3, r3, #1
+ 8000cac:	2b00      	cmp	r3, #0
+ 8000cae:	d0f8      	beq.n	8000ca2 <MSYSTICK_voidSetBusyWait+0x76>
+
+		/* Disable the counter */
+		CLR_BIT(STK->CTRL, STK_CTRL_ENABLE_BIT);
+ 8000cb0:	4b09      	ldr	r3, [pc, #36]	; (8000cd8 <MSYSTICK_voidSetBusyWait+0xac>)
+ 8000cb2:	681b      	ldr	r3, [r3, #0]
+ 8000cb4:	4a08      	ldr	r2, [pc, #32]	; (8000cd8 <MSYSTICK_voidSetBusyWait+0xac>)
+ 8000cb6:	f023 0301 	bic.w	r3, r3, #1
+ 8000cba:	6013      	str	r3, [r2, #0]
+
+		/* update the pre-load value with 0 */
+		STK->LOAD = 0;
+ 8000cbc:	4b06      	ldr	r3, [pc, #24]	; (8000cd8 <MSYSTICK_voidSetBusyWait+0xac>)
+ 8000cbe:	2200      	movs	r2, #0
+ 8000cc0:	605a      	str	r2, [r3, #4]
+		STK->VAL  = 0;
+ 8000cc2:	4b05      	ldr	r3, [pc, #20]	; (8000cd8 <MSYSTICK_voidSetBusyWait+0xac>)
+ 8000cc4:	2200      	movs	r2, #0
+ 8000cc6:	609a      	str	r2, [r3, #8]
+	}
+}
+ 8000cc8:	bf00      	nop
+ 8000cca:	370c      	adds	r7, #12
+ 8000ccc:	46bd      	mov	sp, r7
+ 8000cce:	bc80      	pop	{r7}
+ 8000cd0:	4770      	bx	lr
+ 8000cd2:	bf00      	nop
+ 8000cd4:	000f4240 	.word	0x000f4240
+ 8000cd8:	e000e010 	.word	0xe000e010
+
+08000cdc <main>:
+
+
+
+
+int main()
+{
+ 8000cdc:	b580      	push	{r7, lr}
+ 8000cde:	b08c      	sub	sp, #48	; 0x30
+ 8000ce0:	af04      	add	r7, sp, #16
+	MRCC_voidClkInit();
+ 8000ce2:	f7ff fe93 	bl	8000a0c <MRCC_voidClkInit>
+
+	MSYSTICk_voidEnable();
+ 8000ce6:	f7ff ff93 	bl	8000c10 <MSYSTICk_voidEnable>
+	   /* Enable the Rcc for the GPIOA */
+	MGPIO_voidIntialization(IOPA);//
+ 8000cea:	2004      	movs	r0, #4
+ 8000cec:	f7ff fd1c 	bl	8000728 <MGPIO_voidIntialization>
+
+	MGPIO_voidSetPinMode(PIN0,GPIO_PORTA,Output10_PushPull);
+ 8000cf0:	2201      	movs	r2, #1
+ 8000cf2:	2101      	movs	r1, #1
+ 8000cf4:	2000      	movs	r0, #0
+ 8000cf6:	f7ff fd27 	bl	8000748 <MGPIO_voidSetPinMode>
+//	MGPIO_ErrorStatusSetPinMode(PIN9,GPIO_PORTA,Output2_AFPushPull);
+//	MGPIO_ErrorStatusSetPinMode(PIN10,GPIO_PORTA,Input_Floating);
+
+	MCAN_voidInit();
+ 8000cfa:	f7ff fa39 	bl	8000170 <MCAN_voidInit>
+	CAN_Msg x,y;
+	MCAN_voidCreateMessage(100,99,0,1,CAN_MSG_Standard_Format,CAN_MSG_DataFrame,CAN_TSR_TME0,&x);
+ 8000cfe:	f107 0310 	add.w	r3, r7, #16
+ 8000d02:	9303      	str	r3, [sp, #12]
+ 8000d04:	231a      	movs	r3, #26
+ 8000d06:	9302      	str	r3, [sp, #8]
+ 8000d08:	2300      	movs	r3, #0
+ 8000d0a:	9301      	str	r3, [sp, #4]
+ 8000d0c:	2300      	movs	r3, #0
+ 8000d0e:	9300      	str	r3, [sp, #0]
+ 8000d10:	2301      	movs	r3, #1
+ 8000d12:	2200      	movs	r2, #0
+ 8000d14:	2163      	movs	r1, #99	; 0x63
+ 8000d16:	2064      	movs	r0, #100	; 0x64
+ 8000d18:	f7ff fbd8 	bl	80004cc <MCAN_voidCreateMessage>
+	MSYSTICK_voidSetBusyWait(1000000,MICRO_SEC);
+ 8000d1c:	2102      	movs	r1, #2
+ 8000d1e:	480d      	ldr	r0, [pc, #52]	; (8000d54 <main+0x78>)
+ 8000d20:	f7ff ff84 	bl	8000c2c <MSYSTICK_voidSetBusyWait>
+
+//	volatile u32 recmsg = 0;
+
+	while(1)
+	{
+		MCAN_voidSendMessage(&x);
+ 8000d24:	f107 0310 	add.w	r3, r7, #16
+ 8000d28:	4618      	mov	r0, r3
+ 8000d2a:	f7ff fa2f 	bl	800018c <MCAN_voidSendMessage>
+		MSYSTICK_voidSetBusyWait(1000000,MICRO_SEC);
+ 8000d2e:	2102      	movs	r1, #2
+ 8000d30:	4808      	ldr	r0, [pc, #32]	; (8000d54 <main+0x78>)
+ 8000d32:	f7ff ff7b 	bl	8000c2c <MSYSTICK_voidSetBusyWait>
+		MCAN_voidReadMessage(&y, 0);
+ 8000d36:	463b      	mov	r3, r7
+ 8000d38:	2100      	movs	r1, #0
+ 8000d3a:	4618      	mov	r0, r3
+ 8000d3c:	f7ff fad6 	bl	80002ec <MCAN_voidReadMessage>
+		if(y.Data[0] == 99)
+ 8000d40:	793b      	ldrb	r3, [r7, #4]
+ 8000d42:	2b63      	cmp	r3, #99	; 0x63
+ 8000d44:	d1ee      	bne.n	8000d24 <main+0x48>
+		{
+			MGPIO_voidSetPinValue(PIN0, GPIO_PORTA, 1);
+ 8000d46:	2201      	movs	r2, #1
+ 8000d48:	2101      	movs	r1, #1
+ 8000d4a:	2000      	movs	r0, #0
+ 8000d4c:	f7ff fdde 	bl	800090c <MGPIO_voidSetPinValue>
+		MCAN_voidSendMessage(&x);
+ 8000d50:	e7e8      	b.n	8000d24 <main+0x48>
+ 8000d52:	bf00      	nop
+ 8000d54:	000f4240 	.word	0x000f4240
+
+08000d58 <Reset_Handler>:
+
+  .section .text.Reset_Handler
+  .weak Reset_Handler
+  .type Reset_Handler, %function
+Reset_Handler:
+  ldr   r0, =_estack
+ 8000d58:	480d      	ldr	r0, [pc, #52]	; (8000d90 <LoopForever+0x2>)
+  mov   sp, r0          /* set stack pointer */
+ 8000d5a:	4685      	mov	sp, r0
+/* Call the clock system initialization function.*/
+  bl  SystemInit
+ 8000d5c:	f3af 8000 	nop.w
+
+/* Copy the data segment initializers from flash to SRAM */
+  ldr r0, =_sdata
+ 8000d60:	480c      	ldr	r0, [pc, #48]	; (8000d94 <LoopForever+0x6>)
+  ldr r1, =_edata
+ 8000d62:	490d      	ldr	r1, [pc, #52]	; (8000d98 <LoopForever+0xa>)
+  ldr r2, =_sidata
+ 8000d64:	4a0d      	ldr	r2, [pc, #52]	; (8000d9c <LoopForever+0xe>)
+  movs r3, #0
+ 8000d66:	2300      	movs	r3, #0
+  b LoopCopyDataInit
+ 8000d68:	e002      	b.n	8000d70 <LoopCopyDataInit>
+
+08000d6a <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
+ 8000d6a:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
+ 8000d6c:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
+ 8000d6e:	3304      	adds	r3, #4
+
+08000d70 <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+ 8000d70:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
+ 8000d72:	428c      	cmp	r4, r1
+  bcc CopyDataInit
+ 8000d74:	d3f9      	bcc.n	8000d6a <CopyDataInit>
+
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
+ 8000d76:	4a0a      	ldr	r2, [pc, #40]	; (8000da0 <LoopForever+0x12>)
+  ldr r4, =_ebss
+ 8000d78:	4c0a      	ldr	r4, [pc, #40]	; (8000da4 <LoopForever+0x16>)
+  movs r3, #0
+ 8000d7a:	2300      	movs	r3, #0
+  b LoopFillZerobss
+ 8000d7c:	e001      	b.n	8000d82 <LoopFillZerobss>
+
+08000d7e <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
+ 8000d7e:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
+ 8000d80:	3204      	adds	r2, #4
+
+08000d82 <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
+ 8000d82:	42a2      	cmp	r2, r4
+  bcc FillZerobss
+ 8000d84:	d3fb      	bcc.n	8000d7e <FillZerobss>
+
+/* Call static constructors */
+  bl __libc_init_array
+ 8000d86:	f000 f811 	bl	8000dac <__libc_init_array>
+/* Call the application's entry point.*/
+  bl main
+ 8000d8a:	f7ff ffa7 	bl	8000cdc <main>
+
+08000d8e <LoopForever>:
+
+LoopForever:
+  b LoopForever
+ 8000d8e:	e7fe      	b.n	8000d8e <LoopForever>
+  ldr   r0, =_estack
+ 8000d90:	20005000 	.word	0x20005000
+  ldr r0, =_sdata
+ 8000d94:	20000000 	.word	0x20000000
+  ldr r1, =_edata
+ 8000d98:	20000000 	.word	0x20000000
+  ldr r2, =_sidata
+ 8000d9c:	08000e14 	.word	0x08000e14
+  ldr r2, =_sbss
+ 8000da0:	20000000 	.word	0x20000000
+  ldr r4, =_ebss
+ 8000da4:	20000020 	.word	0x20000020
+
+08000da8 <ADC1_2_IRQHandler>:
+ * @retval : None
+*/
+  .section .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b Infinite_Loop
+ 8000da8:	e7fe      	b.n	8000da8 <ADC1_2_IRQHandler>
+	...
+
+08000dac <__libc_init_array>:
+ 8000dac:	b570      	push	{r4, r5, r6, lr}
+ 8000dae:	2600      	movs	r6, #0
+ 8000db0:	4d0c      	ldr	r5, [pc, #48]	; (8000de4 <__libc_init_array+0x38>)
+ 8000db2:	4c0d      	ldr	r4, [pc, #52]	; (8000de8 <__libc_init_array+0x3c>)
+ 8000db4:	1b64      	subs	r4, r4, r5
+ 8000db6:	10a4      	asrs	r4, r4, #2
+ 8000db8:	42a6      	cmp	r6, r4
+ 8000dba:	d109      	bne.n	8000dd0 <__libc_init_array+0x24>
+ 8000dbc:	f000 f81a 	bl	8000df4 <_init>
+ 8000dc0:	2600      	movs	r6, #0
+ 8000dc2:	4d0a      	ldr	r5, [pc, #40]	; (8000dec <__libc_init_array+0x40>)
+ 8000dc4:	4c0a      	ldr	r4, [pc, #40]	; (8000df0 <__libc_init_array+0x44>)
+ 8000dc6:	1b64      	subs	r4, r4, r5
+ 8000dc8:	10a4      	asrs	r4, r4, #2
+ 8000dca:	42a6      	cmp	r6, r4
+ 8000dcc:	d105      	bne.n	8000dda <__libc_init_array+0x2e>
+ 8000dce:	bd70      	pop	{r4, r5, r6, pc}
+ 8000dd0:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8000dd4:	4798      	blx	r3
+ 8000dd6:	3601      	adds	r6, #1
+ 8000dd8:	e7ee      	b.n	8000db8 <__libc_init_array+0xc>
+ 8000dda:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8000dde:	4798      	blx	r3
+ 8000de0:	3601      	adds	r6, #1
+ 8000de2:	e7f2      	b.n	8000dca <__libc_init_array+0x1e>
+ 8000de4:	08000e0c 	.word	0x08000e0c
+ 8000de8:	08000e0c 	.word	0x08000e0c
+ 8000dec:	08000e0c 	.word	0x08000e0c
+ 8000df0:	08000e10 	.word	0x08000e10
+
+08000df4 <_init>:
+ 8000df4:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000df6:	bf00      	nop
+ 8000df8:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8000dfa:	bc08      	pop	{r3}
+ 8000dfc:	469e      	mov	lr, r3
+ 8000dfe:	4770      	bx	lr
+
+08000e00 <_fini>:
+ 8000e00:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000e02:	bf00      	nop
+ 8000e04:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8000e06:	bc08      	pop	{r3}
+ 8000e08:	469e      	mov	lr, r3
+ 8000e0a:	4770      	bx	lr

@@ -1,0 +1,6 @@
+../Src/N5110_Program.c:59:6:n5110_init	16	static
+../Src/N5110_Program.c:126:6:n5110_print	24	static
+../Src/N5110_Program.c:173:6:n5110_pos	16	static
+../Src/N5110_Program.c:193:6:n5110_clear	16	static
+../Src/N5110_Program.c:217:6:print_buffer	24	static
+../Src/N5110_Program.c:246:6:n5110_light	16	static

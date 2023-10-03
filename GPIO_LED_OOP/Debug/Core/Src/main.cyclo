@@ -1,0 +1,8 @@
+../Core/Src/main.cpp:248:2:Button::Button(GPIO_TypeDef*, uint8_t)	2
+../Core/Src/main.cpp:259:9:status Button::getBtnStatus()	1
+../Core/Src/main.cpp:277:2:Led::Led(GPIO_TypeDef*, uint8_t)	2
+../Core/Src/main.cpp:288:7:void Led::switchOff()	1
+../Core/Src/main.cpp:293:7:void Led::switchOn()	1
+../Core/Src/main.cpp:306:2:Clock::Clock(GPIO_TypeDef*)	3
+../Core/Src/main.cpp:321:6:void Delay()	2
+../Core/Src/main.cpp:325:5:int main()	3

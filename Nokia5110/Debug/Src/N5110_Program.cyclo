@@ -1,0 +1,6 @@
+../Src/N5110_Program.c:59:6:n5110_init	1
+../Src/N5110_Program.c:126:6:n5110_print	4
+../Src/N5110_Program.c:173:6:n5110_pos	1
+../Src/N5110_Program.c:193:6:n5110_clear	2
+../Src/N5110_Program.c:217:6:print_buffer	3
+../Src/N5110_Program.c:246:6:n5110_light	1

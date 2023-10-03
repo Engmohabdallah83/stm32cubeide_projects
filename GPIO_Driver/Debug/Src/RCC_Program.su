@@ -1,0 +1,3 @@
+../Src/RCC_Program.c:15:6:RCC_voidSysClockInit	4	static
+../Src/RCC_Program.c:39:6:RCC_voidEnablePerClk	16	static
+../Src/RCC_Program.c:52:6:RCC_voidDisablePerClk	16	static

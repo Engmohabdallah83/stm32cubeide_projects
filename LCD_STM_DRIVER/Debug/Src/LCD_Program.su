@@ -1,0 +1,10 @@
+../Src/LCD_Program.c:32:6:GPIO_voidSetPortValue	24	static
+../Src/LCD_Program.c:41:6:LCD_vidWriteCommand	16	static
+../Src/LCD_Program.c:53:6:LCD_vidWriteData	16	static
+../Src/LCD_Program.c:74:6:LCD_vidInit	8	static
+../Src/LCD_Program.c:138:6:LCD_vidClear	8	static
+../Src/LCD_Program.c:151:6:LCD_vidWriteString	24	static
+../Src/LCD_Program.c:171:6:vid_GoToAddress	24	static
+../Src/LCD_Program.c:193:6:LCD_vidWriteExtraChar	24	static
+../Src/LCD_Program.c:226:6:LCD_vidWriteInCGRAM	24	static
+../Src/LCD_Program.c:256:6:LCD_vidWriteInt	24	static

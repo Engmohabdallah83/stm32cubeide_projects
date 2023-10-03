@@ -1,0 +1,7 @@
+../Core/Inc/Robot_interface.h:14:7:constexpr Robot_Abstract::Robot_Abstract()	1
+../Core/Src/Robot_Prog.cpp:12:1:RC_Robot::RC_Robot(Motor*, Motor*)	1
+../Core/Src/Robot_Prog.cpp:17:6:virtual void RC_Robot::MoveFWD()	1
+../Core/Src/Robot_Prog.cpp:23:6:virtual void RC_Robot::MoveBWD()	1
+../Core/Src/Robot_Prog.cpp:29:6:virtual void RC_Robot::TurnLeft()	1
+../Core/Src/Robot_Prog.cpp:35:6:virtual void RC_Robot::TurnRight()	1
+../Core/Src/Robot_Prog.cpp:41:6:virtual void RC_Robot::Rob_Stop()	1

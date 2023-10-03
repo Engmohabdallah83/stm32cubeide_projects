@@ -1,0 +1,4 @@
+../Core/Src/Motor_Prog.cpp:13:1:Motor::Motor(MotorType*)	56	static
+../Core/Src/Motor_Prog.cpp:29:6:void Motor::MotorStop()	16	static
+../Core/Src/Motor_Prog.cpp:36:6:void Motor::MotorCW()	16	static
+../Core/Src/Motor_Prog.cpp:43:6:void Motor::MotorCCW()	16	static

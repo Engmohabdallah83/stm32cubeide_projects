@@ -1,0 +1,7 @@
+../Src/NVIC_Program.c:15:6:NVIC_voidInit	4	static
+../Src/NVIC_Program.c:25:6:NVIC_voidEnableInt	16	static
+../Src/NVIC_Program.c:47:6:NVIC_voidDisableInt	16	static
+../Src/NVIC_Program.c:69:6:NVIC_voidSetPendingFlag	16	static
+../Src/NVIC_Program.c:91:6:NVIC_voidClrPendingFlag	16	static
+../Src/NVIC_Program.c:115:6:NVIC_voidGetActiveFlag	16	static
+../Src/NVIC_Program.c:135:6:NVIC_voidSetIntPriority	16	static

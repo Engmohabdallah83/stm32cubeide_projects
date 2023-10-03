@@ -1,0 +1,11 @@
+../Src/GPIO_program.c:76:6:MGPIO_voidIntialization	16	static
+../Src/GPIO_program.c:89:6:MGPIO_voidOFF	16	static
+../Src/GPIO_program.c:115:6:MGPIO_voidSetPinMode	16	static
+../Src/GPIO_program.c:223:6:MGPIO_voidSetPortMode	24	static
+../Src/GPIO_program.c:248:4:MGPIO_u8GetPin	24	static
+../Src/GPIO_program.c:302:6:MGPIO_voidSetPinValue	16	static
+../Src/GPIO_program.c:385:6:MGPIO_SetPortValue	16	static
+../Src/GPIO_program.c:462:6:MGPIO_AtomicSet	16	static
+../Src/GPIO_program.c:506:6:MGPIO_AtomicReset	16	static
+../Src/GPIO_program.c:551:6:MGPIO_voidLockPin	16	static
+../Src/GPIO_program.c:661:6:MGPIO_voidSetPortDiffValues	24	static

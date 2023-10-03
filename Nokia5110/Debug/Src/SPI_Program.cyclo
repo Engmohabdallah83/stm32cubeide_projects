@@ -1,0 +1,3 @@
+../Src/SPI_Program.c:56:6:spi_init	3
+../Src/SPI_Program.c:133:6:spi_tx	7
+../Src/SPI_Program.c:176:6:spi_msg	7

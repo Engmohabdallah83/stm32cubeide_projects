@@ -1,0 +1,5 @@
+../Core/Src/main.cpp:30:5:int main()	3
+../Core/Src/main.cpp:63:6:void SystemClock_Config()	3
+../Core/Src/main.cpp:103:6:void Error_Handler()	1
+../Core/Src/main.cpp:112:1:void __static_initialization_and_destruction_0(int, int)	3
+../Core/Src/main.cpp:112:1:cpp)	1

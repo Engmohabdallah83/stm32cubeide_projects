@@ -1,0 +1,16 @@
+../Src/CAN_program.c:89:6:MCAN_voidInit	8	static
+../Src/CAN_program.c:103:6:MCAN_voidSendMessage	16	static
+../Src/CAN_program.c:170:6:MCAN_voidReadMessage	16	static
+../Src/CAN_program.c:226:6:MCAN_voidPendingMSG	4	static
+../Src/CAN_program.c:242:4:MCAN_u8CheckReady	24	static
+../Src/CAN_program.c:276:6:MCAN_voidCreateMessage	24	static
+../Src/CAN_program.c:317:13:MCAN_voidSetup	8	static
+../Src/CAN_program.c:359:13:MCAN_voidMode	4	static
+../Src/CAN_program.c:384:13:MCAN_voidInitializationMode	4	static
+../Src/CAN_program.c:400:13:MCAN_voidStart	4	static
+../Src/CAN_program.c:414:13:MCAN_voidFiltersInit	16	static
+../Src/CAN_program.c:432:12:MCAN_u32FiltersEnable	16	static
+../Src/CAN_program.c:455:12:MCAN_u32FiltersMode	16	static
+../Src/CAN_program.c:478:12:MCAN_u32FiltersScale	16	static
+../Src/CAN_program.c:501:12:MCAN_u32FiltersAssign	16	static
+../Src/CAN_program.c:524:13:MCAN_voidSetIDs	4	static

@@ -1,0 +1,4 @@
+../Src/RCC_program.c:70:6:MRCC_voidClkInit	8	static
+../Src/RCC_program.c:157:6:MRCC_voidSetClkSource	16	static
+../Src/RCC_program.c:195:6:MRCC_voidSetPeripheralclock	16	static
+../Src/RCC_program.c:257:6:MRCC_voidSetClkStatus	16	static
