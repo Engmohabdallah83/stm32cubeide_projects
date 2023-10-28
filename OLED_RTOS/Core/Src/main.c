@@ -49,6 +49,7 @@
 
 /* USER CODE BEGIN PV */
 SemaphoreHandle_t Mutex; 	//define MUTEX of SemaphoreHandle_t
+xQueueHandle xQueue;		//define a Queue
 
 I2C_HandleTypeDef hi2c1;	//Create an instance of I2C_1
 
@@ -62,6 +63,7 @@ static void MX_I2C1_Init(void);		//I2C1 initialization prototype
 
 void Welcome(void *pvParameter);	//Task welcome prototype
 void TempSensor(void *pvParameter); //Task Tempsensor prototype
+//void ClearTask(void *pvParameter);
 
 /* USER CODE END PFP */
 
@@ -77,6 +79,7 @@ void TempSensor(void *pvParameter); //Task Tempsensor prototype
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+	uint8_t StartFlag = 0;
 
   /* USER CODE END 1 */
 
@@ -102,6 +105,8 @@ int main(void)
   GPIOA->CRL = (3<<4) | (3<<8); // configure PA1 = blue led as output pin
 
   Mutex = xSemaphoreCreateMutex();  //Mutex creation
+  xQueue = xQueueCreate(1,sizeof(char)); //create a Queue
+
   MX_GPIO_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
@@ -127,8 +132,11 @@ int main(void)
 	  GPIOA->CRL = (3<<4) | (3<<8); // configure PA1 = blue led as output pin
 	  GPIOA->ODR |=(1<<1);
 
-	  xTaskCreate(TempSensor, "TempSensorTask", 300, NULL, 3, NULL);
+//	  xTaskCreate(ClearTask, "Clear_Task", 300, NULL, 3, NULL);
 	  xTaskCreate(Welcome, "WelcomeTask", 300, NULL, 3, NULL);
+	  xTaskCreate(TempSensor, "TempSensorTask", 300, NULL, 3, NULL);
+
+	  xQueueSendToBack(xQueue,&StartFlag,portMAX_DELAY);
 
 	  vTaskStartScheduler();
   }
@@ -151,12 +159,27 @@ int main(void)
   return 0;
 }
 
+//void ClearTask(void *pvParameter)
+//{
+//	SSD1306_Clear();
+////	vTaskDelay(200/portTICK_PERIOD_MS);
+//}
+
 void Welcome(void *pvParameter)
 {
+	uint8_t Flag = 0;
 	while(1)
 	{
 		xSemaphoreTake(Mutex, portMAX_DELAY);
-		SSD1306_Clear();
+
+		if(xQueue != NULL)
+				xQueueReceive(xQueue, &Flag,portMAX_DELAY);
+		if(Flag == 0)
+		{
+			Flag =1;
+			SSD1306_Clear();
+		}
+
 		GPIOA->ODR |=(1<<1);
 
 		SSD1306_GotoXY (0,0);
@@ -165,16 +188,30 @@ void Welcome(void *pvParameter)
 		SSD1306_Puts ("Abdallah", &Font_11x18, 1);
 		SSD1306_UpdateScreen();
 //		HAL_Delay (1000);
-		vTaskDelay(300/portTICK_PERIOD_MS);
 
+//		vTaskDelay(400/portTICK_PERIOD_MS);
+		xQueueSendToBack(xQueue,&Flag,portMAX_DELAY);
 		xSemaphoreGive(Mutex);
 	}
 }
 
 void TempSensor(void *pvParameter)
 {
+	uint8_t Flag = 1;
+
+	while(1)
+	{
 		xSemaphoreTake(Mutex, portMAX_DELAY);
-		SSD1306_Clear();
+		if(xQueue != NULL)
+		{
+			xQueueReceive(xQueue, &Flag,portMAX_DELAY);
+		}
+		if(Flag != 0)
+		{
+			Flag = 0;
+			SSD1306_Clear();
+		}
+
 		GPIOA->ODR &=~(1<<1);
 		SSD1306_GotoXY (0,0);
 		SSD1306_Puts ("Temp", &Font_11x18, 1);
@@ -182,9 +219,11 @@ void TempSensor(void *pvParameter)
 		SSD1306_Puts ("IS : ", &Font_11x18, 1);
 		SSD1306_UpdateScreen();
 //		HAL_Delay (1000);
-		vTaskDelay(100/portTICK_PERIOD_MS);
+
+//		vTaskDelay(400/portTICK_PERIOD_MS);
+		xQueueSendToBack(xQueue,&Flag,portMAX_DELAY);
 		xSemaphoreGive(Mutex);
-		while(1);
+	}
 }
 
 
