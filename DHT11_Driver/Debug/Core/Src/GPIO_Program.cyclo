@@ -1,0 +1,5 @@
+../Core/Src/GPIO_Program.c:14:16:GPIO_PDir	13
+../Core/Src/GPIO_Program.c:83:16:GPIO_IN_PULLUP	13
+../Core/Src/GPIO_Program.c:166:16:GPIO_IN_PULLDN	13
+../Core/Src/GPIO_Program.c:248:16:GPIO_PW	13
+../Core/Src/GPIO_Program.c:303:16:GPIO_PR	7

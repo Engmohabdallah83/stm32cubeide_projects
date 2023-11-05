@@ -1,0 +1,6 @@
+../Core/Src/DHT11_Prog.c:21:9:DHT11_ReadPin	1
+../Core/Src/DHT11_Prog.c:34:6:DHT11_Start	1
+../Core/Src/DHT11_Prog.c:52:7:Check_Response	4
+../Core/Src/DHT11_Prog.c:76:7:DHT11_Read	5
+../Core/Src/DHT11_Prog.c:102:6:DHT11_ReadAll	3
+../Core/Src/DHT11_Prog.c:123:6:DHT11_ReadData	1

@@ -79,7 +79,7 @@ void TempSensor(void *pvParameter); //Task Tempsensor prototype
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	uint8_t StartFlag = 0;
+//	uint8_t StartFlag = 0;
 
   /* USER CODE END 1 */
 
@@ -133,10 +133,9 @@ int main(void)
 	  GPIOA->ODR |=(1<<1);
 
 //	  xTaskCreate(ClearTask, "Clear_Task", 300, NULL, 3, NULL);
-	  xTaskCreate(Welcome, "WelcomeTask", 300, NULL, 3, NULL);
-	  xTaskCreate(TempSensor, "TempSensorTask", 300, NULL, 3, NULL);
+	  xTaskCreate(Welcome, "WelcomeTask", 300, NULL, 1, NULL);
 
-	  xQueueSendToBack(xQueue,&StartFlag,portMAX_DELAY);
+	  //xQueueSendToBack(xQueue,&StartFlag,portMAX_DELAY);
 
 	  vTaskStartScheduler();
   }
@@ -167,62 +166,71 @@ int main(void)
 
 void Welcome(void *pvParameter)
 {
-	uint8_t Flag = 0;
+//	uint8_t Flag = 0;
+	TaskHandle_t xTaskTempHandle = NULL;
+
 	while(1)
 	{
-		xSemaphoreTake(Mutex, portMAX_DELAY);
+//		xSemaphoreTake(Mutex, portMAX_DELAY);
 
-		if(xQueue != NULL)
-				xQueueReceive(xQueue, &Flag,portMAX_DELAY);
-		if(Flag == 0)
-		{
-			Flag =1;
+//		if(xQueue != NULL)
+//				xQueueReceive(xQueue, &Flag,portMAX_DELAY);
+//		if(Flag == 0)
+//		{
+//			Flag =1;
+//			SSD1306_Clear();
+//		}
+
 			SSD1306_Clear();
-		}
-
 		GPIOA->ODR |=(1<<1);
 
 		SSD1306_GotoXY (0,0);
-		SSD1306_Puts ("Mohamed", &Font_11x18, 1);
+		SSD1306_Puts ("WELCOME", &Font_11x18, 1);
 		SSD1306_GotoXY (0, 30);
-		SSD1306_Puts ("Abdallah", &Font_11x18, 1);
+		SSD1306_Puts ("TASK:", &Font_11x18, 1);
 		SSD1306_UpdateScreen();
 //		HAL_Delay (1000);
+//		xSemaphoreGive(Mutex);
+		vTaskDelay(2000/portTICK_PERIOD_MS);
+		xTaskCreate(TempSensor, "TempSensorTask", 300, NULL, 2, &xTaskTempHandle);
+		vTaskDelay(2000/portTICK_PERIOD_MS);
+//		xQueueSendToBack(xQueue,&Flag,portMAX_DELAY);
 
-//		vTaskDelay(400/portTICK_PERIOD_MS);
-		xQueueSendToBack(xQueue,&Flag,portMAX_DELAY);
-		xSemaphoreGive(Mutex);
 	}
 }
 
 void TempSensor(void *pvParameter)
 {
-	uint8_t Flag = 1;
+//	uint8_t Flag = 1;
+	TaskHandle_t xTaskTempHandle = (TaskHandle_t)pvParameter;
 
 	while(1)
 	{
-		xSemaphoreTake(Mutex, portMAX_DELAY);
-		if(xQueue != NULL)
-		{
-			xQueueReceive(xQueue, &Flag,portMAX_DELAY);
-		}
-		if(Flag != 0)
-		{
-			Flag = 0;
-			SSD1306_Clear();
-		}
 
+//		xSemaphoreTake(Mutex, portMAX_DELAY);
+//		if(xQueue != NULL)
+//		{
+//			xQueueReceive(xQueue, &Flag,portMAX_DELAY);
+//		}
+//		if(Flag != 0)
+//		{
+//			Flag = 0;
+//			SSD1306_Clear();
+//		}
+			SSD1306_Clear();
 		GPIOA->ODR &=~(1<<1);
 		SSD1306_GotoXY (0,0);
-		SSD1306_Puts ("Temp", &Font_11x18, 1);
+		SSD1306_Puts ("TEMP", &Font_11x18, 1);
 		SSD1306_GotoXY (0, 30);
-		SSD1306_Puts ("IS : ", &Font_11x18, 1);
+		SSD1306_Puts ("TASK : ", &Font_11x18, 1);
 		SSD1306_UpdateScreen();
 //		HAL_Delay (1000);
+//		xSemaphoreGive(Mutex);
+//		vTaskDelay(1000/portTICK_PERIOD_MS);
 
-//		vTaskDelay(400/portTICK_PERIOD_MS);
-		xQueueSendToBack(xQueue,&Flag,portMAX_DELAY);
-		xSemaphoreGive(Mutex);
+		vTaskDelete( xTaskTempHandle );
+		//		xQueueSendToBack(xQueue,&Flag,portMAX_DELAY);
+
 	}
 }
 

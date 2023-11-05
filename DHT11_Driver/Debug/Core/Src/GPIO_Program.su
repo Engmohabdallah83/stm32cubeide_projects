@@ -1,0 +1,5 @@
+../Core/Src/GPIO_Program.c:14:16:GPIO_PDir	16	static
+../Core/Src/GPIO_Program.c:83:16:GPIO_IN_PULLUP	24	static
+../Core/Src/GPIO_Program.c:166:16:GPIO_IN_PULLDN	24	static
+../Core/Src/GPIO_Program.c:248:16:GPIO_PW	16	static
+../Core/Src/GPIO_Program.c:303:16:GPIO_PR	16	static
