@@ -1,0 +1,5 @@
+../Core/Src/UART_Prog.c:15:17:USART_Initialize	4
+../Core/Src/UART_Prog.c:74:6:USART_setFrameSize	1
+../Core/Src/UART_Prog.c:79:6:USART_read	3
+../Core/Src/UART_Prog.c:90:6:USART_sendString	2
+../Core/Src/UART_Prog.c:99:6:USART_sendChar	2

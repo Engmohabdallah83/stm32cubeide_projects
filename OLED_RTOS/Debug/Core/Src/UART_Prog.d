@@ -1,4 +1,5 @@
-Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
+Core/Src/UART_Prog.o: ../Core/Src/UART_Prog.c \
+ ../Core/Inc/UART_Interface.h ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  ../Core/Inc/stm32f1xx_hal_conf.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
@@ -21,16 +22,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h \
- ../Core/Inc/FreeRTOS.h ../Core/Inc/FreeRTOSConfig.h \
- ../Core/Inc/projdefs.h ../Core/Inc/portable.h \
- ../Core/Inc/deprecated_definitions.h ../Core/Inc/portmacro.h \
- ../Core/Inc/mpu_wrappers.h ../Core/Inc/task.h ../Core/Inc/list.h \
- ../Core/Inc/queue.h ../Core/Inc/semphr.h ../Core/Inc/queue.h \
- ../Core/Inc/fonts.h ../Core/Inc/ssd1306.h ../Core/Inc/fonts.h \
- ../Core/Inc/DHT11_Interface.h ../Core/Inc/UART_Config.h \
- ../Core/Inc/UART_Interface.h ../Core/Inc/main.h \
- ../Core/Inc/UART_Interface.h
+ ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
+../Core/Inc/UART_Interface.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
 ../Core/Inc/stm32f1xx_hal_conf.h:
@@ -55,23 +48,3 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h:
-../Core/Inc/FreeRTOS.h:
-../Core/Inc/FreeRTOSConfig.h:
-../Core/Inc/projdefs.h:
-../Core/Inc/portable.h:
-../Core/Inc/deprecated_definitions.h:
-../Core/Inc/portmacro.h:
-../Core/Inc/mpu_wrappers.h:
-../Core/Inc/task.h:
-../Core/Inc/list.h:
-../Core/Inc/queue.h:
-../Core/Inc/semphr.h:
-../Core/Inc/queue.h:
-../Core/Inc/fonts.h:
-../Core/Inc/ssd1306.h:
-../Core/Inc/fonts.h:
-../Core/Inc/DHT11_Interface.h:
-../Core/Inc/UART_Config.h:
-../Core/Inc/UART_Interface.h:
-../Core/Inc/main.h:
-../Core/Inc/UART_Interface.h:

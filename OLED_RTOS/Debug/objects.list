@@ -1,3 +1,5 @@
+"./Core/Src/DHT11_Prog.o"
+"./Core/Src/UART_Prog.o"
 "./Core/Src/croutine.o"
 "./Core/Src/event_groups.o"
 "./Core/Src/fonts.o"
